@@ -50,8 +50,7 @@ const Navbar = () => {
       {/* RIGHT */}
       <div className="w-[-30%] flex items-center gap-4 xl:gap-8 justify-end">
 
-        <ClerkLoaded>
-
+      {/*
           <SignedIn>
               <div className="cursor-pointer">
                 <Image src = "/image/people.png" alt = "" width={25} height={25}></Image>
@@ -73,7 +72,7 @@ const Navbar = () => {
               <Link href = "/sign-in"> LogIn / SignUp </Link>
             </div>
           </SignedOut>
-
+        */}
         
         <MobileMenu />
       </div>
