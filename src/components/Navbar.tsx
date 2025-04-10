@@ -1,6 +1,7 @@
 import Link from "next/link";
 import MobileMenu from "./MobileMenu";
 import Image from 'next/image';
+import {buttonVariants} from './ui/button'
 
 const Navbar = () => {
   return (
@@ -49,6 +50,8 @@ const Navbar = () => {
 
       {/* RIGHT */}
       <div className="w-[-30%] flex items-center gap-4 xl:gap-8 justify-end">
+
+        <Link className={buttonVariants() } href='/sign-in'> Sign In </Link>
 
       {/*
           <SignedIn>
