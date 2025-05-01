@@ -1,6 +1,6 @@
 const LeftMenu = () =>{
     return(
-        <div className=""> <LeftMenu/> </div>
+        <div className=""> LeftMenu </div>
     );
 }
 

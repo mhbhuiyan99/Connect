@@ -1,7 +1,9 @@
+
 import Link from "next/link";
 import MobileMenu from "./MobileMenu";
 import Image from 'next/image';
 import {buttonVariants} from './ui/button'
+import UserButton from "./user-button";
 
 const Navbar = () => {
   return (
@@ -42,7 +44,7 @@ const Navbar = () => {
           <div className="hidden md:flex p-1 items-center rounded-xl border border-red-800 font-medium">
 
             <input type = "text" placeholder="search..." className="bg-transparent outline-none"/>
-            <Image src = "/image/search.png" alt = "" width={14} height={14} />
+            {/*<Image src = "/image/search.png" alt = "" width={100%} height={100%} />*/}
           </div>          
 
         </div>
@@ -51,9 +53,11 @@ const Navbar = () => {
       {/* RIGHT */}
       <div className="w-[-30%] flex items-center gap-4 xl:gap-8 justify-end">
 
-        <Link className={buttonVariants() } href='/sign-in'> Sign In </Link>
+        
+      <Link className={buttonVariants() } href='/sign-in'> <UserButton/> </Link>
+        
 
-      {/*
+      {/*<Link className={buttonVariants() } href='/sign-in'> Sign In </Link>
           <SignedIn>
               <div className="cursor-pointer">
                 <Image src = "/image/people.png" alt = "" width={25} height={25}></Image>
@@ -66,7 +70,6 @@ const Navbar = () => {
               <div className="cursor-pointer">
                 <Image src = "/image/notification.png" alt = "" width={25} height={25}></Image>
               </div>
-              <UserButton/>
           </SignedIn>
 
           <SignedOut>
