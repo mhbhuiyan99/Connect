@@ -8,7 +8,7 @@ const Profile = () => {
         <div className="flex gap-5">
 
 
-      <div className="hidden xl:block w-[20%]"> <LeftMenu/> </div>
+      <div className="hidden xl:block w-[20%]"> <LeftMenu type="profile"/> </div>
 
       <div className="w-full lg:w-[70%] xl:w-[70%]">
 
