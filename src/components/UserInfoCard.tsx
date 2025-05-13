@@ -36,7 +36,7 @@ const UserInfoCard = ({userId}:{userId:string}) => {
           <div className="flex items-center gap-2">
             <Image src="/image/work.png" alt="" width={16} height={16} />
             <span>
-              Works at <b>Apple Inc.</b>
+              Works at <b>XYZ Inc.</b>
             </span>
           </div>
           <div className="flex items-center justify-between">

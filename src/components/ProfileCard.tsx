@@ -1,3 +1,4 @@
+import { Link } from "lucide-react";
 import Image from "next/image";
 const ProfileCard = () => {
   return (
@@ -45,7 +46,7 @@ const ProfileCard = () => {
           </div>
           <span className="text-xs text-gray-500">100 Followers</span>
         </div>
-        <button className="bg-blue-500 text-white text-xs p-2 rounded-md">My Profile</button>
+        <button className="bg-blue-500 text-white text-xs p-2 rounded-md"> My Profile</button>
       </div>
     </div>
   );
