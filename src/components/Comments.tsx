@@ -19,6 +19,7 @@ const Comments = () => {
           placeholder="Write a comment...."
           className="bg-transparent outline-none flex-1"
         />
+        {/* emoji comment
         <Image
           src="/image/emoji.png"
           alt=""
@@ -26,6 +27,7 @@ const Comments = () => {
           height={16}
           className="cursor-pointer"
         />
+        */}
       </div>
 
       {/* comments */}

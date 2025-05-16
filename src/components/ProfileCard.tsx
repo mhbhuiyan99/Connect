@@ -1,8 +1,10 @@
 import { Link } from "lucide-react";
 import Image from "next/image";
+import NextLink from 'next/link'; 
+
 const ProfileCard = () => {
   return (
-    <div className="p-4 bg-white rounded-lg shadow-lg shadow-md text-sm flex flex-col gap-6">
+    <div className="p-4 bg-white rounded-lg shadow-md text-sm flex flex-col gap-6">
       <div className="h-20 relative">
         <Image
           src="https://images.pexels.com/photos/30029972/pexels-photo-30029972/free-photo-of-snow-capped-mountain-range-in-winter.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load"
@@ -46,7 +48,9 @@ const ProfileCard = () => {
           </div>
           <span className="text-xs text-gray-500">100 Followers</span>
         </div>
-        <button className="bg-blue-500 text-white text-xs p-2 rounded-md"> My Profile</button>
+        <NextLink href="\profile\1"> {/* Use NextLink and specify the path */}
+          <button className="bg-blue-500 text-white text-xs p-2 rounded-md"> My Profile</button>
+        </NextLink>
       </div>
     </div>
   );

@@ -1,6 +1,5 @@
 "use client"
 
-
 import LeftMenu from "@/components/LeftMenu";
 import RightMenu from "@/components/RightMenu";
 import AddPost from "@/components/AddPost";
