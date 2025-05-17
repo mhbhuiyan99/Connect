@@ -21,49 +21,74 @@ const Navbar = () => {
       <div className="hidden md:flex items-center justify-between w-[80%]">
         {/* LINKS */}
         <div className="flex gap-6 text-red-800 font-semibold">
-
           <Link href="/" className="flex items-center gap-2">
-            <Image src="/image/home.png" alt = "Home" width={25} height={25} className="w-4 h-4"/>
+            <Image
+              src="/image/home.png"
+              alt="Home"
+              width={25}
+              height={25}
+              className="w-4 h-4"
+            />
             <span> Home </span>
           </Link>
 
-          <Link href="/" className="flex items-center gap-2">
-            <Image src = "/image/network.png" alt = "Network" width={25} height={25} className="w-4 h-4"/>
-            <span> Network </span>
+          <Link href="/notice" className="flex items-center gap-2">
+            <Image
+              src="/image/network.png"
+              alt="Network"
+              width={25}
+              height={25}
+              className="w-4 h-4"
+            />
+            <span>Notice</span>
           </Link>
 
           <Link href="/AlumniInfo/view" className="flex items-center gap-2">
-            <Image src = "/image/job.png" alt = "Job" width={25} height={25} className="w-4 h-4" />
+            <Image
+              src="/image/job.png"
+              alt="Job"
+              width={25}
+              height={25}
+              className="w-4 h-4"
+            />
             <span> Member Info </span>
           </Link>
-        {/*
+          {/*
           <Link href="/" className="flex items-center gap-2">
             <Image src = "/image/gem.png" alt = "Gem" width={25} height={25} className="w-5 h-5"/>
             <span> Gem </span>
           </Link>
           */}
           <Link href="/AlumniInfo" className="flex items-center gap-2">
-            <Image src = "/image/job.png" alt = "Gem" width={25} height={25} className="w-5 h-5"/>
+            <Image
+              src="/image/job.png"
+              alt="Gem"
+              width={25}
+              height={25}
+              className="w-5 h-5"
+            />
             <span>AlumniInfo</span>
           </Link>
 
           <div className="hidden md:flex p-1 items-center rounded-xl border border-red-800 font-medium">
-
-            <input type = "text" placeholder="search..." className="bg-transparent outline-none"/>
+            <input
+              type="text"
+              placeholder="search..."
+              className="bg-transparent outline-none"
+            />
             {/*<Image src = "/image/search.png" alt = "" width={100%} height={100%} />*/}
-          </div>          
-
+          </div>
         </div>
       </div>
 
       {/* RIGHT */}
       <div className="w-[-30%] flex items-center gap-4 xl:gap-8 justify-end">
+        <Link className={buttonVariants()} href="/sign-in">
+          {" "}
+          <UserButton />{" "}
+        </Link>
 
-        
-      <Link className={buttonVariants() } href='/sign-in'> <UserButton/> </Link>
-        
-
-      {/*<Link className={buttonVariants() } href='/sign-in'> Sign In </Link>
+        {/*<Link className={buttonVariants() } href='/sign-in'> Sign In </Link>
           <SignedIn>
               <div className="cursor-pointer">
                 <Image src = "/image/people.png" alt = "" width={25} height={25}></Image>
@@ -85,7 +110,7 @@ const Navbar = () => {
             </div>
           </SignedOut>
         */}
-        
+
         <MobileMenu />
       </div>
     </div>
