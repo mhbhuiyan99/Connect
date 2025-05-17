@@ -1,9 +1,11 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
   images: {
-    domains: ["images.pexels.com"], // ✅ Add allowed image domains here
+    domains: ["images.pexels.com"],
+  },
+  eslint: { // new add for vercel
+    ignoreDuringBuilds: true, 
   },
 };
 

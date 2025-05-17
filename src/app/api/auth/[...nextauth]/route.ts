@@ -22,22 +22,27 @@ const handler = NextAuth({
                 email: {},
                 password: {},
             },
-            async authorize(credentials){
+            async authorize(credentials) {
                 try{
                     await connectToDatabase();
                     const user = await User.findOne({email: credentials?.email});
 
                     if(!user){
-                        throw new Error("")
+                        throw new Error("No user found")
                     }
                     const isValidPassword = await bcrypt.compare(
-                        credentials?.password ?? "", user.password as string
+                        credentials?.password ?? "",
+                        user.password as string
                     );
 
-                    if(!isValidPassword){
-                        throw new Error("");
+                    if (!isValidPassword) {
+                        throw new Error("Invalid password");
                     }
-                    return user;
+                    return {
+                        id: user.id.toString(),
+                        name: user.name,
+                        email: user.email,
+                    }; /* return user : previous code */
                 }
 
                 catch{
