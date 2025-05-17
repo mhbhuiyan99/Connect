@@ -1,15 +1,15 @@
 import mongoose, { Document, Model, Schema } from "mongoose";
 
 export interface IAlumni {
-  timestamp: string;
-  studentId: string;
-  batch: string;
-  name: string;
-  email: string;
-  currentIndustry?: string;
-  jobTitle?: string;
-  skills?: string;
-  photo?: string;
+  StudentID: string;
+  Batch: string;
+  Name: string;
+  Email: string;
+  CurrentIndustry?: string;
+  JobTitle?: string;
+  Skills?: string;
+  LinkedIn?: string;
+  Photo?: string;
 }
 
 export interface IAlumniDocument extends IAlumni, Document {
@@ -19,41 +19,41 @@ export interface IAlumniDocument extends IAlumni, Document {
 
 const AlumniSchema = new Schema<IAlumniDocument>(
   {
-    timestamp: {
-      type: String,
-      required: true,
-    },
-    studentId: {
+    StudentID: {
       type: String,
       required: true,
       unique: true,
     },
-    batch: {
+    Batch: {
       type: String,
       required: true,
     },
-    name: {
+    Name: {
       type: String,
       required: true,
     },
-    email: {
+    Email: {
       type: String,
       required:true,
       unique:true,
     },
-    currentIndustry: {
+    CurrentIndustry: {
       type: String,
       default: "",
     },
-    jobTitle: {
+    JobTitle: {
       type: String,
       default: "",
     },
-    skills: {
+    Skills: {
       type: String,
       default: "",
     },
-    photo: {
+    LinkedIn: {
+      type: String,
+      default: "",
+    },
+    Photo: {
       type: String,
       default: "",
     },

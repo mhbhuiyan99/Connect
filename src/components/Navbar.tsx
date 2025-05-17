@@ -4,6 +4,7 @@ import MobileMenu from "./MobileMenu";
 import Image from 'next/image';
 import {buttonVariants} from './ui/button'
 import UserButton from "./user-button";
+import Alumni from '@/models/Alumni';
 
 const Navbar = () => {
   return (
@@ -35,10 +36,15 @@ const Navbar = () => {
             <Image src = "/image/job.png" alt = "Job" width={25} height={25} className="w-4 h-4" />
             <span> Job </span>
           </Link>
-
+        {/*
           <Link href="/" className="flex items-center gap-2">
             <Image src = "/image/gem.png" alt = "Gem" width={25} height={25} className="w-5 h-5"/>
             <span> Gem </span>
+          </Link>
+          */}
+          <Link href="/AlumniInfo" className="flex items-center gap-2">
+            <Image src = "/image/job.png" alt = "Gem" width={25} height={25} className="w-5 h-5"/>
+            <span>AlumniInfo</span>
           </Link>
 
           <div className="hidden md:flex p-1 items-center rounded-xl border border-red-800 font-medium">
