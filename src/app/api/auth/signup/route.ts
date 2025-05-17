@@ -4,14 +4,14 @@ import User from '@/models/user'
 import connectToDatabase from '@/lib/mongodb';
 
 export async function POST(request:Request) {
-    const {name, email, password, confirmPassword} = await request.json();
+    const {studentID, name, email, password, confirmPassword} = await request.json();
 
     const isValidEmail = (email: string) => {
         const emailRegex = /[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailRegex.test(email);
     }
 
-    if(!name || !email || !password || !confirmPassword){
+    if(!studentID || !name || !email || !password || !confirmPassword){
         return NextResponse.json({message: "All fields are required"}, {status: 400});
     }
 
@@ -37,6 +37,7 @@ export async function POST(request:Request) {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         const newUser = new User({
+            studentID,
             email,
             name,
             password: hashedPassword,

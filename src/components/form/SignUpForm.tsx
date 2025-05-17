@@ -29,6 +29,7 @@ import { signIn } from "next-auth/react";
 
 const SignUpForm = () => {
   const [form, setForm] = useState({
+      studentID: "",
       name: "",
       email: "",
       password: "",
@@ -96,6 +97,15 @@ const SignUpForm = () => {
 
         <CardContent className="px-2 sm:px-6">
           <form onSubmit={handleSubmit} className="space-y-3">
+            <Input
+              type="text"
+              disabled={pending}
+              placeholder="CE____"
+              value={form.studentID}
+              onChange={(e) => setForm({...form, studentID:e.target.value}) }
+              required
+            />
+
             <Input
               type="text"
               disabled={pending}
