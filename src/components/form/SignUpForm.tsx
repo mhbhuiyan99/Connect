@@ -118,7 +118,7 @@ const SignUpForm = () => {
             <Input
               type="email"
               disabled={pending}
-              placeholder="ce_____@mbstu.ac.bd"
+              placeholder="email"
               value={form.email}
               onChange={(e) => setForm({...form, email:e.target.value})}
               required

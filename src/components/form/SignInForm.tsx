@@ -85,7 +85,7 @@ const SignInForm = () => {
             <Input
               type="email"
               disabled={pending}
-              placeholder="ce_____@mbstu.ac.bd"
+              placeholder="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required

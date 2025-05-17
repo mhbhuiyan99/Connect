@@ -25,6 +25,7 @@ const AlumniInfoForm = () => {
     Skills: "",
     Photo: "",
     LinkedIn: "",
+    Facebook: "",
   });
 
   const [pending, setPending] = useState(false);
@@ -70,12 +71,12 @@ const AlumniInfoForm = () => {
   };
 
   return (
-    <div className="h-full flex items-center justify-center bg-slate-300">
-      <Card className="md:h-auto w-[80%] sm:w-[420px] p-4 sm:p-8">
+    <div className="h-full flex items-center justify-center bg-slate-100">
+      <Card className="w-[80%] max-w-4xl p-6">
         <CardHeader>
           <CardTitle className="text-center">Alumni Information</CardTitle>
           <CardDescription className="text-sm text-center text-accent-foreground">
-            Please fill in your alumni information
+            Please fill your information
           </CardDescription>
         </CardHeader>
 
@@ -87,7 +88,7 @@ const AlumniInfoForm = () => {
         )}
 
         <CardContent className="px-2 sm:px-6">
-          <form onSubmit={handleSubmit} className="space-y-3">
+          <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-6">
             <Input
               type="text"
               disabled={pending}
@@ -161,17 +162,26 @@ const AlumniInfoForm = () => {
               onChange={(e) => setForm({ ...form, LinkedIn: e.target.value })}
             />
 
+            <Input
+              type="text"
+              disabled={pending}
+              placeholder="Facebook Profile URL"
+              value={form.Facebook}
+              onChange={(e) => setForm({ ...form, Facebook: e.target.value })}
+            />
+
             <div className="space-y-1">
-              <label className="text-sm font-medium">Profile Photo</label>
               <Input
                 type="file"
                 disabled={pending}
+                placeholder="select profile photo"
                 accept="image/*"
                 onChange={handleFileChange}
               />
+              <label className="text-sm font-medium">Profile Photo</label>
             </div>
 
-            <Button className="w-full" size="lg" disabled={pending}>
+            <Button className="col-span-full justify-self-center w-full md:w-1/2 mt-6" size="lg" disabled={pending}>
               {pending ? "Submitting..." : "Submit"}
             </Button>
           </form>

@@ -18,7 +18,7 @@ const Navbar = () => {
       </div>
 
       {/* CENTER */}
-      <div className="hidden md:flex items-center justify-between w-[60%]">
+      <div className="hidden md:flex items-center justify-between w-[80%]">
         {/* LINKS */}
         <div className="flex gap-6 text-red-800 font-semibold">
 
@@ -32,9 +32,9 @@ const Navbar = () => {
             <span> Network </span>
           </Link>
 
-          <Link href="/" className="flex items-center gap-2">
+          <Link href="/AlumniInfo/view" className="flex items-center gap-2">
             <Image src = "/image/job.png" alt = "Job" width={25} height={25} className="w-4 h-4" />
-            <span> Job </span>
+            <span> Member Info </span>
           </Link>
         {/*
           <Link href="/" className="flex items-center gap-2">

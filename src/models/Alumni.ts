@@ -1,15 +1,16 @@
 import mongoose, { Document, Model, Schema } from "mongoose";
 
 export interface IAlumni {
-  StudentID: string;
-  Batch: string;
-  Name: string;
-  Email: string;
-  CurrentIndustry?: string;
-  JobTitle?: string;
-  Skills?: string;
-  LinkedIn?: string;
-  Photo?: string;
+  studentID: string; 
+  batch: string;
+  name: string;
+  email: string;
+  currentIndustry?: string;
+  jobTitle?: string;
+  skills?: string[]; 
+  linkedIn?: string;
+  facebook?: string;
+  photo?: string;
 }
 
 export interface IAlumniDocument extends IAlumni, Document {
@@ -19,41 +20,45 @@ export interface IAlumniDocument extends IAlumni, Document {
 
 const AlumniSchema = new Schema<IAlumniDocument>(
   {
-    StudentID: {
+    studentID: {  
       type: String,
       required: true,
       unique: true,
     },
-    Batch: {
+    batch: { 
       type: String,
       required: true,
     },
-    Name: {
+    name: { 
       type: String,
       required: true,
     },
-    Email: {
+    email: { 
       type: String,
-      required:true,
-      unique:true,
+      required: true,
+      unique: true,
     },
-    CurrentIndustry: {
+    currentIndustry: {
+      type: String,
+      default: "Not specified",
+    },
+    jobTitle: {
+      type: String,
+      default: "Not specified",
+    },
+    skills: {  // Changed to array
+      type: [String],
+      default: [],
+    },
+    linkedIn: {
       type: String,
       default: "",
     },
-    JobTitle: {
+    facebook: {
       type: String,
       default: "",
     },
-    Skills: {
-      type: String,
-      default: "",
-    },
-    LinkedIn: {
-      type: String,
-      default: "",
-    },
-    Photo: {
+    photo: {
       type: String,
       default: "",
     },
@@ -61,6 +66,9 @@ const AlumniSchema = new Schema<IAlumniDocument>(
   { timestamps: true }
 );
 
-const Alumni: Model<IAlumniDocument> = mongoose.models?.Alumni || mongoose.model<IAlumniDocument>("Alumni", AlumniSchema);
+// Existing model check
+const Alumni: Model<IAlumniDocument> = 
+  mongoose.models?.Alumni || 
+  mongoose.model<IAlumniDocument>("Alumni", AlumniSchema);
 
 export default Alumni;
