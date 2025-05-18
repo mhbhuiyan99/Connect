@@ -8,8 +8,9 @@ export async function POST(req: NextRequest) {
     const data = await req.json();
 
     const existing = await Alumni.findOne({
-      $or: [{ StudentID: data.StudentID }, { Email: data.Email }],
+      $or: [{ studentID: data.studentID }, { email: data.email }],
     });
+
 
     if (existing) {
       return NextResponse.json({ error: "StudentID or Email already exists" }, { status: 409 });

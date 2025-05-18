@@ -3,13 +3,13 @@ import connectToDatabase from "@/lib/mongodb";
 import Alumni, { IAlumniDocument } from "@/models/Alumni";
 
 interface NormalizedAlumni {
-  studentID: string;
+  studentID: string; 
   batch: string;
   name: string;
   email: string;
   currentIndustry?: string;
   jobTitle?: string;
-  skills: string[];
+  skills?: string[]; 
   linkedIn?: string;
   facebook?: string;
   photo?: string;
@@ -18,16 +18,15 @@ interface NormalizedAlumni {
 export async function GET() {
   try {
     await connectToDatabase();
-    
-    const alumni = await Alumni.find({ batch: { $exists: true } }).exec();
-    
 
-    // Initialize with proper type
+    const alumni = await Alumni.find({ batch: { $exists: true } }).exec();
+
+    console.log("Fetched alumni count:", alumni.length); // 🧪 log for debug
+
     const groupedData: Record<string, NormalizedAlumni[]> = {};
 
     alumni.forEach((alum: IAlumniDocument) => {
-      // Convert skills to array if needed
-      const skills = Array.isArray(alum.skills) 
+      const skills = Array.isArray(alum.skills)
         ? alum.skills.filter(skill => skill.trim().length > 0)
         : [];
 
@@ -41,22 +40,27 @@ export async function GET() {
         skills,
         linkedIn: alum.linkedIn,
         facebook: alum.facebook,
-        photo: alum.photo
+        photo: alum.photo,
       };
 
       const batchKey = normalized.batch || 'Unknown';
-      if (!groupedData[batchKey]) {
-        groupedData[batchKey] = [];
-      }
+      if (!groupedData[batchKey]) groupedData[batchKey] = [];
       groupedData[batchKey].push(normalized);
     });
 
-    return NextResponse.json(groupedData);
+    // Sort batches and studentIDs
+    const sortedGroupedData = Object.fromEntries(
+      Object.entries(groupedData)
+        .sort(([a], [b]) => a.localeCompare(b)) // sort batch
+        .map(([batch, list]) => [
+          batch,
+          list.sort((a, b) => a.studentID.localeCompare(b.studentID)) // sort studentID
+        ])
+    );
+
+    return NextResponse.json(sortedGroupedData);
   } catch (error) {
     console.error("Error fetching alumni:", error);
-    return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }

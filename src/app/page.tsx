@@ -18,13 +18,13 @@ const Homepage = () => {
       <div className="w-full lg:w-[70%] xl:w-[70%]">
 
           <div className="flex flex-col gap-5">
-            <AddPost/>
+            {/*<AddPost/>*/}
             <Feed/>
           </div>
 
       </div>
 
-      <div className="hidden lg:block w-[30%]"> <RightMenu/> </div>
+      <div className="hidden lg:block w-[20%]"> <RightMenu/> </div>
       
 
     </div>

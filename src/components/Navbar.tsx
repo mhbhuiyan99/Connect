@@ -18,39 +18,39 @@ const Navbar = () => {
       </div>
 
       {/* CENTER */}
-      <div className="hidden md:flex items-center justify-between w-[80%]">
+      <div className="hidden md:flex items-center justify-between w-[70%]">
         {/* LINKS */}
         <div className="flex gap-6 text-red-800 font-semibold">
           <Link href="/" className="flex items-center gap-2">
-            <Image
+            {/*<Image
               src="/image/home.png"
               alt="Home"
               width={25}
               height={25}
               className="w-4 h-4"
-            />
+            />*/}
             <span> Home </span>
           </Link>
 
           <Link href="/notice" className="flex items-center gap-2">
-            <Image
+            {/*<Image
               src="/image/network.png"
               alt="Network"
               width={25}
               height={25}
               className="w-4 h-4"
-            />
+            />*/}
             <span>Notice</span>
           </Link>
 
           <Link href="/AlumniInfo/view" className="flex items-center gap-2">
-            <Image
+            {/*<Image
               src="/image/job.png"
               alt="Job"
               width={25}
               height={25}
               className="w-4 h-4"
-            />
+            />*/}
             <span> Member Info </span>
           </Link>
           {/*
@@ -60,14 +60,21 @@ const Navbar = () => {
           </Link>
           */}
           <Link href="/AlumniInfo" className="flex items-center gap-2">
-            <Image
+            {/*<Image
               src="/image/job.png"
               alt="Gem"
               width={25}
               height={25}
               className="w-5 h-5"
-            />
-            <span>AlumniInfo</span>
+            />*/}
+            <span>Alumni Form</span>
+          </Link>
+
+          <Link
+            href="/"
+            className="flex items-center gap-2"
+          >
+            <span>Events</span>
           </Link>
 
           <div className="hidden md:flex p-1 items-center rounded-xl border border-red-800 font-medium">

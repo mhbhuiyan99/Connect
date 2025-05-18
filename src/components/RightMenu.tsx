@@ -13,7 +13,7 @@ const RightMenu = ({userId}:{userId?:string}) =>{
 
 
         ) : null }
-        <FriendRequests />
+        {/*<FriendRequests />*/}
         
         
         </div>

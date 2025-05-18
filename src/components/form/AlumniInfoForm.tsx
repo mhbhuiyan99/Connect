@@ -16,13 +16,13 @@ import { useState } from "react";
 
 const AlumniInfoForm = () => {
   const [form, setForm] = useState({
-    StudentID: "",
-    Batch: "",
-    Name: "",
-    Email: "",
-    CurrentIndustry: "",
-    JobTitle: "",
-    Skills: "",
+    studentID: "",
+    batch: "",
+    name: "",
+    email: "",
+    currentIndustry: "",
+    jobTitle: "",
+    skills: "",
     Photo: "",
     LinkedIn: "",
     Facebook: "",
@@ -93,8 +93,8 @@ const AlumniInfoForm = () => {
               type="text"
               disabled={pending}
               placeholder="Student ID"
-              value={form.StudentID}
-              onChange={(e) => setForm({ ...form, StudentID: e.target.value })}
+              value={form.studentID}
+              onChange={(e) => setForm({ ...form, studentID: e.target.value })}
               required
             />
 
@@ -102,8 +102,8 @@ const AlumniInfoForm = () => {
               type="text"
               disabled={pending}
               placeholder="Batch"
-              value={form.Batch}
-              onChange={(e) => setForm({ ...form, Batch: e.target.value })}
+              value={form.batch}
+              onChange={(e) => setForm({ ...form, batch: e.target.value })}
               required
             />
 
@@ -111,8 +111,8 @@ const AlumniInfoForm = () => {
               type="text"
               disabled={pending}
               placeholder="Full Name"
-              value={form.Name}
-              onChange={(e) => setForm({ ...form, Name: e.target.value })}
+              value={form.name}
+              onChange={(e) => setForm({ ...form, name: e.target.value })}
               required
             />
 
@@ -120,8 +120,8 @@ const AlumniInfoForm = () => {
               type="email"
               disabled={pending}
               placeholder="Email"
-              value={form.Email}
-              onChange={(e) => setForm({ ...form, Email: e.target.value })}
+              value={form.email}
+              onChange={(e) => setForm({ ...form, email: e.target.value })}
               required
             />
 
@@ -129,9 +129,9 @@ const AlumniInfoForm = () => {
               type="text"
               disabled={pending}
               placeholder="Current Industry"
-              value={form.CurrentIndustry}
+              value={form.currentIndustry}
               onChange={(e) =>
-                setForm({ ...form, CurrentIndustry: e.target.value })
+                setForm({ ...form, currentIndustry: e.target.value })
               }
               required
             />
@@ -140,8 +140,8 @@ const AlumniInfoForm = () => {
               type="text"
               disabled={pending}
               placeholder="Job Title"
-              value={form.JobTitle}
-              onChange={(e) => setForm({ ...form, JobTitle: e.target.value })}
+              value={form.jobTitle}
+              onChange={(e) => setForm({ ...form, jobTitle: e.target.value })}
               required
             />
 
@@ -149,8 +149,8 @@ const AlumniInfoForm = () => {
               type="text"
               disabled={pending}
               placeholder="Skills (comma separated)"
-              value={form.Skills}
-              onChange={(e) => setForm({ ...form, Skills: e.target.value })}
+              value={form.skills}
+              onChange={(e) => setForm({ ...form, skills: e.target.value })}
               required
             />
 
