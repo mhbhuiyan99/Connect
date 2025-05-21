@@ -29,6 +29,7 @@ const ProfilePage = () => {
                 />
               </div>
               <h1 className="mt-20 mb-4 text-2xl font-medium">User name</h1>
+              {/*
               <div className="flex items-center justify-center gap-12 mb-4">
                 <div className="flex flex-col items-center">
                   <span className="font-medium">123</span>
@@ -43,6 +44,7 @@ const ProfilePage = () => {
                   <span className="test-sm">Following</span>
                 </div>
               </div>
+              */}
             </div>
             <Feed />
           </div>

@@ -20,14 +20,13 @@ const Post = () => {
             {/* Description */}
             <div className="flex flex-col gap-4">
                 <div className="w-full min-h-96 relative">
-                    <Image src="/image/home.png" 
+                    <Image src="/image/temp.webp" 
                            fill 
                            className="object-cover rounded-md" 
                            alt=""
                     />
                 </div>
-                <p> Welcome to the Weekly LeetCode Tech Interview Prep Series
-                This weekly live stream is designed to help you prepare for coding interviews at top tech companies by solving real LeetCode problems and discussing proven strategies to face them. </p>
+                <p> Homepage temp. </p>
             </div>
 
             {/* Interraction */}
