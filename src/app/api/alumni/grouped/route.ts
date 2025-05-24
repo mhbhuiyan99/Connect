@@ -21,7 +21,7 @@ export async function GET() {
 
     const alumni = await Alumni.find({ batch: { $exists: true } }).exec();
 
-    console.log("Fetched alumni count:", alumni.length); // 🧪 log for debug
+    console.log("Fetched alumni count:", alumni.length);
 
     const groupedData: Record<string, NormalizedAlumni[]> = {};
 
