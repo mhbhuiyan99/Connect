@@ -1,16 +1,18 @@
 "use client";
 import { useEffect, useState } from "react";
+import { FaLinkedin, FaFacebook, FaEnvelope } from "react-icons/fa";
 
 interface Alumni {
   studentID: string;
   batch: string;
   name: string;
   email: string;
-  linkedIn?: string;
+  linkedIn: string;
+  facebook: string;
   currentIndustry?: string;
-  jobTitle?: string;
+  jobTitle: string;
   skills: string[];
-  photo?: string;
+  photo: string;
 }
 
 export default function AlumniViewPage() {
@@ -62,19 +64,19 @@ export default function AlumniViewPage() {
         </div>
       ) : (
         Object.entries(groupedAlumni).map(([batch, alumni]) => (
-          <div key={batch} className="mb-8 border rounded-lg p-4">
+          <div key={batch} className="mb-8 border border-red-800 rounded-lg p-3 bg-slate-100">
             <button
               onClick={() => toggleBatch(batch)}
               className="text-xl font-semibold w-full text-left flex justify-between items-center"
             >
-              <span>Batch: {batch}</span>
-              <span>{expandedBatches[batch] ? "▼" : "▶"}</span>
+              <span >Batch: {batch}</span>
+              <span>{expandedBatches[batch] ? "🔺" : "🔻"}</span>
             </button>
 
             {expandedBatches[batch] && (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
                 {alumni.map((alum) => (
-                  <div key={alum.studentID} className="border rounded-lg p-4">
+                  <div key={alum.studentID} className="border border-red-800 rounded-lg p-4">
                     {alum.photo && (
                       <img
                         src={alum.photo}
@@ -83,12 +85,39 @@ export default function AlumniViewPage() {
                       />
                     )}
                     <h3 className="font-bold text-lg">{alum.name}</h3>
-                    {alum.jobTitle && <p><strong> </strong> {alum.jobTitle}</p>}
+                    {alum.jobTitle && <p className="text-gray-600">{alum.jobTitle}</p>}
+
                     {alum.skills && alum.skills.length > 0 && (
-                      <p><strong>Skills:</strong> {alum.skills.join(", ")}</p>
+                      <p className="text-sm mt-2">
+                        <strong>Skills:</strong> {alum.skills.join(", ")}
+                      </p>
                     )}
-                    {alum.linkedIn && <p><strong>LinkedIn:</strong> {alum.linkedIn}</p>}
-                    {alum.email && <p><strong>Email:</strong> {alum.email}</p>}
+
+                    <div className="flex flex-col gap-2 mt-3 text-sm">
+                      {alum.email && (
+                        <a
+                          href={`mailto:${alum.email}`}
+                          className="flex items-center gap-2 hover:underline"
+                        >
+                          <FaEnvelope className="w-4 h-4" />
+                          <span>{alum.email}</span>
+                        </a>
+                      )}
+                      
+
+                      {alum.linkedIn && (
+                        <a
+                          href={alum.linkedIn}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-2 hover:underline"
+                        >
+                          <FaLinkedin className="w-4 h-4 text-blue-700" />
+                          <span>{alum.linkedIn}</span>
+                        </a>
+                      )}
+                    </div>
+
                   </div>
                 ))}
               </div>

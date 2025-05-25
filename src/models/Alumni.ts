@@ -46,7 +46,7 @@ const AlumniSchema = new Schema<IAlumniDocument>(
       type: String,
       default: "Not specified",
     },
-    skills: {  // Changed to array
+    skills: {
       type: [String],
       default: [],
     },
@@ -66,7 +66,7 @@ const AlumniSchema = new Schema<IAlumniDocument>(
   { timestamps: true }
 );
 
-// Existing model check
+
 const Alumni: Model<IAlumniDocument> = 
   mongoose.models?.Alumni || 
   mongoose.model<IAlumniDocument>("Alumni", AlumniSchema);

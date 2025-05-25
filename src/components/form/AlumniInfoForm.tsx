@@ -1,5 +1,10 @@
 "use client";
 
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { TriangleAlert } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -9,10 +14,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
-import { TriangleAlert } from "lucide-react";
-import { useState } from "react";
 
 const AlumniInfoForm = () => {
   const [form, setForm] = useState({
@@ -23,9 +24,9 @@ const AlumniInfoForm = () => {
     currentIndustry: "",
     jobTitle: "",
     skills: "",
-    Photo: "",
-    LinkedIn: "",
-    Facebook: "",
+    linkedIn: "",
+    facebook: "",
+    photo: "",
   });
 
   const [pending, setPending] = useState(false);
@@ -35,28 +36,33 @@ const AlumniInfoForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setPending(true);
+    setError(null);
 
     try {
+      const payload = {
+        ...form,
+        skills: form.skills.split(",").map((skill) => skill.trim()),
+      };
+
       const res = await fetch("/api/alumni", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify(payload),
       });
 
       const data = await res.json();
 
       if (res.ok) {
-        setPending(false);
         toast.success("Alumni information submitted successfully!");
-        router.push("/"); // Redirect after successful submission
+        router.push("/");
       } else {
         setError(data.message || "Failed to submit alumni information");
-        setPending(false);
       }
     } catch (err) {
       setError("An error occurred while submitting the form");
+    } finally {
       setPending(false);
-      }
+    }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -64,7 +70,7 @@ const AlumniInfoForm = () => {
       const file = e.target.files[0];
       const reader = new FileReader();
       reader.onloadend = () => {
-        setForm({ ...form, Photo: reader.result as string });
+        setForm((prev) => ({ ...prev, photo: reader.result as string }));
       };
       reader.readAsDataURL(file);
     }
@@ -88,7 +94,10 @@ const AlumniInfoForm = () => {
         )}
 
         <CardContent className="px-2 sm:px-6">
-          <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-6">
+          <form
+            onSubmit={handleSubmit}
+            className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-6"
+          >
             <Input
               type="text"
               disabled={pending}
@@ -155,33 +164,36 @@ const AlumniInfoForm = () => {
             />
 
             <Input
-              type="text"
+              type="url"
               disabled={pending}
               placeholder="LinkedIn Profile URL"
-              value={form.LinkedIn}
-              onChange={(e) => setForm({ ...form, LinkedIn: e.target.value })}
+              value={form.linkedIn}
+              onChange={(e) => setForm({ ...form, linkedIn: e.target.value })}
             />
 
             <Input
-              type="text"
+              type="url"
               disabled={pending}
               placeholder="Facebook Profile URL"
-              value={form.Facebook}
-              onChange={(e) => setForm({ ...form, Facebook: e.target.value })}
+              value={form.facebook}
+              onChange={(e) => setForm({ ...form, facebook: e.target.value })}
             />
 
             <div className="space-y-1">
               <Input
                 type="file"
                 disabled={pending}
-                placeholder="select profile photo"
                 accept="image/*"
                 onChange={handleFileChange}
               />
               <label className="text-sm font-medium">Profile Photo</label>
             </div>
 
-            <Button className="col-span-full justify-self-center w-full md:w-1/2 mt-6" size="lg" disabled={pending}>
+            <Button
+              className="col-span-full justify-self-center w-full md:w-1/2 mt-6"
+              size="lg"
+              disabled={pending}
+            >
               {pending ? "Submitting..." : "Submit"}
             </Button>
           </form>
