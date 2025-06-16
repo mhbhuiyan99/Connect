@@ -1,9 +1,9 @@
-// app/notice/page.tsx
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import NoticeForm from '@/components/NoticeForm';
 import NoticeList from '@/components/NoticeList';
+import { useAuth } from '@/providers/AuthProvider';
 
 interface Notice {
   id: string;
@@ -15,47 +15,79 @@ interface Notice {
 }
 
 export default function NoticePage() {
+  const { session } = useAuth();
+  const [page, setPage] = useState(1);
   const [notices, setNotices] = useState<Notice[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [hasMore, setHasMore] = useState(true);
+  const loaderRef = useRef<HTMLDivElement | null>(null);
+  const didFetchRef = useRef(false);
 
   useEffect(() => {
-    fetchNotices();
-  }, []);
+    if (!didFetchRef.current) {
+      didFetchRef.current = true;
+      fetchNotices(page);
+    }
+  }, [session]);
 
-  const fetchNotices = async () => {
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !isLoading && hasMore) { fetchNotices(page) }
+      },
+      { threshold: 1.0 }
+    );
+
+    if (loaderRef.current) {
+      observer.observe(loaderRef.current);
+    }
+
+    return () => {
+      if (loaderRef.current) {
+        observer.unobserve(loaderRef.current);
+      }
+    };
+  }, [loaderRef.current, page, session]);
+
+
+  const fetchNotices = async (pageNumber: number, limit: number = 10) => {
+    if (!hasMore) return;
+
+    setIsLoading(true);
     try {
-      const response = await fetch('/api/notice');
-      const data = await response.json();
-      setNotices(data);
-    } catch (error) {
-      console.error('Error fetching notices:', error);
+      const res = await fetch(`http://localhost:8000/v1/notice/?page=${pageNumber}&limit=${limit}`);
+      const data = await res.json();
+      if (data.items.length === 0) {
+        setHasMore(false);
+      } else {
+        setNotices((prev) => [...prev, ...data.items]);
+        setPage(pageNumber + 1);
+      }
+    } catch (err) {
+      console.error("Error fetching notices:", err);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleNewNotice = (newNotice: Notice) => {
-    setNotices([newNotice, ...notices]);
-  };
-
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-8">Notice Board</h1>
-      
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2">
-          {isLoading ? (
+          {isLoading && (
             <div className="flex justify-center items-center h-64">
               <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
             </div>
-          ) : (
-            <NoticeList notices={notices} />
           )}
+          <NoticeList notices={notices} />
+          {hasMore && <div ref={loaderRef} className="h-10" />}
         </div>
-        
-        <div className="lg:col-span-1">
-          <NoticeForm onNewNotice={handleNewNotice} />
-        </div>
+
+        {session && <div className="lg:col-span-1">
+          <NoticeForm onNewNotice={(n) => setNotices((prev) => [n, ...prev])} />
+        </div>}
       </div>
     </div>
   );

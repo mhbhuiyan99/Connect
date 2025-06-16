@@ -2,7 +2,8 @@
 import { NextResponse } from 'next/server';
 import Notice from '@/models/Notice';
 import connectDB from '@/lib/mongodb';
-import getSession from '@/providers/SessionProvider';
+import { getServerSession } from "next-auth";
+import { authOptions } from '@/lib/auth';
 
 interface UserSession {
   user?: {
@@ -20,9 +21,10 @@ interface UserSession {
 export async function GET() {
   try {
     await connectDB();
-    const notices = await Notice.find().populate('createdBy', 'name email');
+    const notices = await Notice.find().sort({ createdAt: -1 });
     return NextResponse.json(notices);
   } catch (error) {
+    console.log('Error fetching notices:', error);
     return NextResponse.json({ error: 'Failed to fetch notices' }, { status: 500 });
   }
 }
@@ -30,13 +32,10 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     await connectDB();
-    
+
     // Create a minimal React-like context to satisfy the SessionProvider
-    const session = await getSession({
-      children: null, // Required by the type definition
-      request: request // Your custom property
-    } as any); // Temporary type assertion
-    
+    const session = await getServerSession(authOptions);
+
     if (!session || !(session as UserSession).user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
@@ -62,6 +61,7 @@ export async function POST(request: Request) {
     await notice.save();
     return NextResponse.json(notice);
   } catch (error) {
+    console.error('Error creating notice:', error);
     return NextResponse.json({ error: 'Failed to create notice' }, { status: 500 });
   }
 }

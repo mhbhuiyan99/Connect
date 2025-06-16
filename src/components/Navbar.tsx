@@ -1,10 +1,12 @@
+'use client';
 
 import Link from "next/link";
 import MobileMenu from "./MobileMenu";
 import Image from 'next/image';
-import {buttonVariants} from './ui/button'
+import { buttonVariants } from './ui/button'
 import UserButton from "./user-button";
 import Alumni from '@/models/Alumni';
+import { useAuth } from "@/providers/AuthProvider";
 
 const Navbar = () => {
   return (
@@ -90,10 +92,11 @@ const Navbar = () => {
 
       {/* RIGHT */}
       <div className="w-[-30%] flex items-center gap-4 xl:gap-8 justify-end">
-        <Link className={buttonVariants()} href="/sign-in">
+        {" "}<UserButton />{" "}
+        {/* <Link className={buttonVariants()} href="/sign-in">
           {" "}
           <UserButton />{" "}
-        </Link>
+        </Link> */}
 
         {/*<Link className={buttonVariants() } href='/sign-in'> Sign In </Link>
           <SignedIn>
