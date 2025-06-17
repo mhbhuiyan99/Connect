@@ -103,8 +103,6 @@ export default function AlumniViewPage() {
                           <span>{alum.email}</span>
                         </a>
                       )}
-                      
-
                       {alum.linkedIn && (
                         <a
                           href={alum.linkedIn}

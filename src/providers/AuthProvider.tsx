@@ -20,7 +20,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const loadAccessToken = async () => {
         try {
             const refreshToken = localStorage.getItem('refresh_token');
-            if (!refreshToken) throw new Error('Missing refresh token');
+            // if (!refreshToken) throw new Error('Missing refresh token');
+            if (!refreshToken) return;
             // console.log("Provider Refresh Token: ", refreshToken);
 
             const res = await fetch('http://localhost:8000/v1/auth/refresh-token', {
