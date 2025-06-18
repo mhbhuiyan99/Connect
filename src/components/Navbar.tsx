@@ -9,6 +9,8 @@ import Alumni from '@/models/Alumni';
 import { useAuth } from "@/providers/AuthProvider";
 
 const Navbar = () => {
+  const { session } = useAuth();
+
   return (
     <div className="h-24 flex items-center justify-between">
       {/* LEFT */}
@@ -33,7 +35,6 @@ const Navbar = () => {
             />*/}
             <span> Home </span>
           </Link>
-
           <Link href="/notice" className="flex items-center gap-2">
             {/*<Image
               src="/image/network.png"
@@ -44,8 +45,7 @@ const Navbar = () => {
             />*/}
             <span>Notice</span>
           </Link>
-
-          <Link href="/AlumniInfo/view" className="flex items-center gap-2">
+          <Link href="/alumni" className="flex items-center gap-2">
             {/*<Image
               src="/image/job.png"
               alt="Job"
@@ -61,32 +61,23 @@ const Navbar = () => {
             <span> Gem </span>
           </Link>
           */}
-          <Link href="/AlumniInfo" className="flex items-center gap-2">
-            {/*<Image
-              src="/image/job.png"
-              alt="Gem"
-              width={25}
-              height={25}
-              className="w-5 h-5"
-            />*/}
-            <span>Alumni Form</span>
-          </Link>
-
-          <Link
-            href="/"
-            className="flex items-center gap-2"
-          >
+          {
+            session?.accessToken && (
+              <Link href="/alumni/form" className="flex items-center gap-2">
+                {/*<Image
+                  src="/image/job.png"
+                  alt="Gem"
+                  width={25}
+                  height={25}
+                  className="w-5 h-5"
+                />*/}
+                <span>Alumni Form</span>
+              </Link>
+            )
+          }
+          <Link href="/events" className="flex items-center gap-2">
             <span>Events</span>
           </Link>
-
-          <div className="hidden md:flex p-1 items-center rounded-xl border border-red-800 font-medium">
-            <input
-              type="text"
-              placeholder="search..."
-              className="bg-transparent outline-none"
-            />
-            {/*<Image src = "/image/search.png" alt = "" width={100%} height={100%} />*/}
-          </div>
         </div>
       </div>
 
