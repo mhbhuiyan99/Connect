@@ -2,6 +2,11 @@
 'use client';
 
 import Image from 'next/image';
+import { format } from "date-fns";
+
+function createdAtDate(createdAt: string) {
+  return <p>{format(new Date(createdAt), "yyyy-MM-dd")}</p>
+}
 
 export default function NoticeList({ notices }: { notices: any[] }) {
   return (
@@ -12,32 +17,30 @@ export default function NoticeList({ notices }: { notices: any[] }) {
         </div>
       ) : (
         notices.map((notice) => (
-          <div key={notice._id} className="bg-white p-6 rounded-lg shadow-md">
+          <div key={notice.id} className="bg-white p-6 rounded-lg shadow-md">
             <div className="flex items-center mb-4">
               <div className="flex-shrink-0">
                 <Image
-                  src={notice.createdBy?.image || '/default-avatar.png'}
-                  alt={notice.createdBy?.name}
+                  src={notice.author_profile_photo || '/default-avatar.png'}
+                  alt={notice.author_name || 'User'}
                   width={40}
                   height={40}
                   className="rounded-full"
                 />
               </div>
               <div className="ml-3">
-                <p className="font-medium text-gray-900">{notice.createdBy?.name}</p>
-                <p className="text-sm text-gray-500">
-                  {new Date(notice.createdAt).toLocaleString()}
-                </p>
+                <p className="font-medium text-gray-900">{notice.author_name}</p>
+                <span className="text-sm text-gray-500">{createdAtDate(notice.created_at)}</span>
               </div>
             </div>
-            
-            <h3 className="text-xl font-semibold mb-2">{notice.title}</h3>
-            <p className="text-gray-700 mb-4 whitespace-pre-line">{notice.content}</p>
-            
-            {notice.imageUrl && (
+            <h3 className="text-xl font-semibold mb-2">{notices.indexOf(notice) + 1}. {notice.title}</h3>
+            {/* <p className="text-gray-700 mb-4 whitespace-pre-line">{notice.content}</p> */}
+            <p className="text-gray-700 mb-4 whitespace-pre-wrap break-words overflow-hidden">{notice.content}</p>
+
+            {notice.image_url && (
               <div className="mt-4">
                 <Image
-                  src={notice.imageUrl}
+                  src={notice.image_url}
                   alt="Notice image"
                   width={800}
                   height={600}

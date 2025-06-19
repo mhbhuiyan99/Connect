@@ -1,11 +1,14 @@
-// components/NoticeForm.tsx
 'use client';
 
+import { config } from '@/lib/config';
+import { useAuth } from '@/providers/AuthProvider';
 import { useState } from 'react';
-import { useSession } from 'next-auth/react';
+import { toast } from 'sonner';
+
 
 export default function NoticeForm({ onNewNotice }: { onNewNotice: (notice: any) => void }) {
-  const { data: session } = useSession();
+  const { session } = useAuth();
+
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [image, setImage] = useState<File | null>(null);
@@ -14,19 +17,20 @@ export default function NoticeForm({ onNewNotice }: { onNewNotice: (notice: any)
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!session) return;
-
     setIsSubmitting(true);
-    try {
-      const formData = new FormData();
-      formData.append('title', title);
-      formData.append('content', content);
-      if (image) {
-        formData.append('image', image);
-      }
 
-      const response = await fetch('/api/notice', {
+    try {
+      const response = await fetch(`${config.apiBaseUrl}/v1/notice/`, {
         method: 'POST',
-        body: formData,
+        body: JSON.stringify({
+          title: title,
+          content: content,
+          image_url: image
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session.accessToken}`
+        }
       });
 
       if (response.ok) {
@@ -38,6 +42,7 @@ export default function NoticeForm({ onNewNotice }: { onNewNotice: (notice: any)
       }
     } catch (error) {
       console.error('Error creating notice:', error);
+      toast.error('Failed to create notice');
     } finally {
       setIsSubmitting(false);
     }
@@ -60,7 +65,7 @@ export default function NoticeForm({ onNewNotice }: { onNewNotice: (notice: any)
             required
           />
         </div>
-        
+
         <div className="mb-4">
           <label htmlFor="content" className="block text-sm font-medium text-gray-700 mb-1">
             Content
@@ -74,7 +79,7 @@ export default function NoticeForm({ onNewNotice }: { onNewNotice: (notice: any)
             required
           />
         </div>
-        
+
         <div className="mb-4">
           <label htmlFor="image" className="block text-sm font-medium text-gray-700 mb-1">
             Image (Optional)
@@ -87,7 +92,7 @@ export default function NoticeForm({ onNewNotice }: { onNewNotice: (notice: any)
             className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
           />
         </div>
-        
+
         <button
           type="submit"
           disabled={isSubmitting}

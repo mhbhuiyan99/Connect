@@ -1,6 +1,6 @@
 import { Link } from "lucide-react";
 import Image from "next/image";
-import NextLink from 'next/link'; 
+import NextLink from 'next/link';
 
 const ProfileCard = () => {
   return (
@@ -9,7 +9,7 @@ const ProfileCard = () => {
         <Image
           src="https://images.pexels.com/photos/30029972/pexels-photo-30029972/free-photo-of-snow-capped-mountain-range-in-winter.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load"
           alt=""
-          fill
+          fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           className="rounded-md object-cover"
         />
         <Image
@@ -24,27 +24,27 @@ const ProfileCard = () => {
         <span className="font-semibold">M. J. BH.</span>
         <div className="flex items-center gap-4 ">
           <div className="flex">
-          <Image
-          src="https://images.pexels.com/photos/30403731/pexels-photo-30403731/free-photo-of-sunset-view-of-mount-teide-in-tenerife.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load"
-          alt=""
-          width={12}
-          height={12}
-          className="rounded-full object-cover w-3 h-3 "
-        />
-        <Image
-          src="https://images.pexels.com/photos/30403731/pexels-photo-30403731/free-photo-of-sunset-view-of-mount-teide-in-tenerife.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load"
-          alt=""
-          width={12}
-          height={12}
-          className="rounded-full object-cover w-3 h-3 "
-        />
-        <Image
-          src="https://images.pexels.com/photos/30403731/pexels-photo-30403731/free-photo-of-sunset-view-of-mount-teide-in-tenerife.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load"
-          alt=""
-          width={12}
-          height={12}
-          className="rounded-full object-cover w-3 h-3 "
-        />
+            <Image
+              src="https://images.pexels.com/photos/30403731/pexels-photo-30403731/free-photo-of-sunset-view-of-mount-teide-in-tenerife.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load"
+              alt=""
+              width={12}
+              height={12}
+              className="rounded-full object-cover w-3 h-3 "
+            />
+            <Image
+              src="https://images.pexels.com/photos/30403731/pexels-photo-30403731/free-photo-of-sunset-view-of-mount-teide-in-tenerife.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load"
+              alt=""
+              width={12}
+              height={12}
+              className="rounded-full object-cover w-3 h-3 "
+            />
+            <Image
+              src="https://images.pexels.com/photos/30403731/pexels-photo-30403731/free-photo-of-sunset-view-of-mount-teide-in-tenerife.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load"
+              alt=""
+              width={12}
+              height={12}
+              className="rounded-full object-cover w-3 h-3 "
+            />
           </div>
           <span className="text-xs text-gray-500">100 Followers</span>
         </div>

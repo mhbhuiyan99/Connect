@@ -1,36 +1,36 @@
-import mongoose, {Document, Model, Schema} from "mongoose";
+import mongoose, { Document, Model, Schema } from "mongoose";
 import { IUser } from "./user";
 
-export interface IComment{
+export interface IComment {
     textMessage: string,
     user: IUser
 }
-export interface ICommentDocument extends IComment, Document{
-    createdAt:Date,
-    updatedAt:Date
+export interface ICommentDocument extends IComment, Document {
+    createdAt: Date,
+    updatedAt: Date
 }
 
 const commentSchema = new mongoose.Schema<ICommentDocument>({
-    textMessage:{
+    textMessage: {
         type: String,
         required: true
     },
-    user:{
-        userID:{
+    user: {
+        userID: {
             type: String,
             required: true
         },
-        profilePhoto:{
+        profilePhoto: {
             type: String,
             required: true
         },
-        name:{
+        name: {
             type: String,
             required: true
         }
     },
-},{timestamps:true});
+}, { timestamps: true });
 
-const Post: Model<ICommentDocument> = mongoose.models?.Comment || mongoose.model<ICommentDocument>("Comment", commentSchema);
+const Comment: Model<ICommentDocument> = mongoose.models?.Comment || mongoose.model<ICommentDocument>("Comment", commentSchema);
 
 export default Comment;
