@@ -16,6 +16,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { FloatingInput } from "@/components/ui/floating-input";
 import { FloatingFileInput } from "../ui/floating-input-file";
+import { config } from "@/lib/config";
 
 const AlumniInfoForm = () => {
   const [form, setForm] = useState({
@@ -41,7 +42,7 @@ const AlumniInfoForm = () => {
     setError(null);
 
     try {
-      const res = await fetch("http://localhost:8000/v1/alumni/insert", {
+      const res = await fetch(`${config.apiBaseUrl}/v1/alumni/insert`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

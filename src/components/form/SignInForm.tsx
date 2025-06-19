@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { Input } from "@/components/ui/input";
+import { FloatingInput } from "@/components/ui/floating-input";
 
 // react icons
 import { FaGithub } from "react-icons/fa";
@@ -21,7 +21,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { TriangleAlert } from "lucide-react";
 import { useAuth } from "@/providers/AuthProvider";
-
+import { config } from "@/lib/config";
 
 const SignInForm = () => {
   const { setSession } = useAuth()
@@ -36,7 +36,7 @@ const SignInForm = () => {
     e.preventDefault()
     setPending(true)
 
-    const result = await fetch("http://localhost:8000/v1/auth/sign-in", {
+    const result = await fetch(`${config.apiBaseUrl}/v1/auth/sign-in`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -93,20 +93,22 @@ const SignInForm = () => {
         )}
         <CardContent className="px-2 sm:px-6">
           <form onSubmit={handleSubmit} className="space-y-3">
-            <Input
+            <FloatingInput
               type="email"
               disabled={pending}
               placeholder="email"
               value={email}
+              label="Email"
               onChange={(e) => setEmail(e.target.value)}
               required
             />
 
-            <Input
+            <FloatingInput
               type="password"
               disabled={pending}
               placeholder="password"
               value={password}
+              label="Password"
               onChange={(e) => setPassword(e.target.value)}
               required
             />

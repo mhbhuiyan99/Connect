@@ -2,7 +2,6 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import Github from "next-auth/providers/github";
 import { AuthOptions } from "next-auth";
 import { getCsrfToken } from "next-auth/react";
-import connectToDatabase from "./mongodb";
 import User from "@/models/user";
 import bcrypt from "bcryptjs";
 

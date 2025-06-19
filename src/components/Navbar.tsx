@@ -5,7 +5,6 @@ import MobileMenu from "./MobileMenu";
 import Image from 'next/image';
 import { buttonVariants } from './ui/button'
 import UserButton from "./user-button";
-import Alumni from '@/models/Alumni';
 import { useAuth } from "@/providers/AuthProvider";
 
 const Navbar = () => {

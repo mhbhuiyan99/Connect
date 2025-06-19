@@ -9,7 +9,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { Input } from "@/components/ui/input";
+import { FloatingInput } from "@/components/ui/floating-input";
+import { FloatingFileInput } from "@/components/ui/floating-input-file";
 
 // react icons
 import { FaGithub } from "react-icons/fa";
@@ -23,6 +24,7 @@ import { TriangleAlert } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { signIn } from "next-auth/react";
+import { config } from "@/lib/config";
 
 
 
@@ -43,7 +45,7 @@ const SignUpForm = () => {
     e.preventDefault();
     setPending(true);
 
-    const res = await fetch("http://localhost:8000/v1/auth/sign-up", {
+    const res = await fetch(`${config.apiBaseUrl}/v1/auth/sign-up`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -109,47 +111,52 @@ const SignUpForm = () => {
 
         <CardContent className="px-2 sm:px-6">
           <form onSubmit={handleSubmit} className="space-y-3">
-            <Input
+            <FloatingInput
               type="text"
               disabled={pending}
               placeholder="CE____"
               value={form.studentID}
+              label="Student ID"
               onChange={(e) => setForm({ ...form, studentID: e.target.value })}
               required
             />
 
-            <Input
+            <FloatingInput
               type="text"
               disabled={pending}
               placeholder="Full name"
               value={form.name}
+              label="Full name"
               onChange={(e) => setForm({ ...form, name: e.target.value })}
               required
             />
 
-            <Input
+            <FloatingInput
               type="email"
               disabled={pending}
               placeholder="email"
               value={form.email}
+              label="Email"
               onChange={(e) => setForm({ ...form, email: e.target.value })}
               required
             />
 
-            <Input
+            <FloatingInput
               type="password"
               disabled={pending}
               placeholder="password"
+              label="Password"
               value={form.password}
               onChange={(e) => setForm({ ...form, password: e.target.value })}
               required
             />
 
-            <Input
+            <FloatingInput
               type="password"
               disabled={pending}
               placeholder="Confirm password"
               value={form.confirmPassword}
+              label="Confirm password"
               onChange={(e) => setForm({ ...form, confirmPassword: e.target.value })}
               required
             />

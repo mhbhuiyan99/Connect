@@ -5,6 +5,8 @@ import { useState, useEffect } from 'react';
 import { useDebounce } from '@/lib/useDebounce';
 import { FaSearch, FaFilter } from "react-icons/fa";
 import { ImSpinner2 } from "react-icons/im";
+import { config } from "@/lib/config";
+
 const FILTERS = {
   NAME: "name",
   SKILLS: "skills",
@@ -28,7 +30,8 @@ export default function AlumniViewPagePage() {
       setLoading(true);
       try {
         const res = await fetch(
-          `http://localhost:8000/v1/alumni/search?page=1&limit=100&filter_by=${filterBy}&query=${encodeURIComponent(debouncedSearchTerm)}`
+          `${config.apiBaseUrl}/v1/alumni/search?page=1&limit=100&filter_by=` +
+          `${filterBy}&query=${encodeURIComponent(debouncedSearchTerm)}`
         );
         if (!res.ok) throw new Error("Failed to fetch alumni");
         const data = await res.json();

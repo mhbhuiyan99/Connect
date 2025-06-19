@@ -1,4 +1,5 @@
 "use client";
+import { config } from '@/lib/config';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
 interface Session {
@@ -27,7 +28,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             if (!refreshToken) return;
             // console.log("Provider Refresh Token: ", refreshToken);
 
-            const res = await fetch('http://localhost:8000/v1/auth/refresh-token', {
+            const res = await fetch(`${config.apiBaseUrl}/v1/auth/refresh-token`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ refresh_token: refreshToken }),

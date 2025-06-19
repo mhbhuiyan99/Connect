@@ -1,5 +1,6 @@
 'use client';
 
+import { config } from '@/lib/config';
 import { useAuth } from '@/providers/AuthProvider';
 import { useState } from 'react';
 import { toast } from 'sonner';
@@ -19,7 +20,7 @@ export default function NoticeForm({ onNewNotice }: { onNewNotice: (notice: any)
     setIsSubmitting(true);
 
     try {
-      const response = await fetch('http://localhost:8000/v1/notice/', {
+      const response = await fetch(`${config.apiBaseUrl}/v1/notice/`, {
         method: 'POST',
         body: JSON.stringify({
           title: title,

@@ -15,6 +15,7 @@ import Link from "next/link";
 import { buttonVariants } from "./ui/button";
 import { useAuth } from "@/providers/AuthProvider";
 
+import { config } from '@/lib/config';
 
 const UserButton = () => {
   const { session, setSession } = useAuth();
@@ -26,7 +27,7 @@ const UserButton = () => {
   const fetchUser = async () => {
     try {
       const accessToken = session?.accessToken;
-      const res = await fetch("http://localhost:8000/v1/users/me", {
+      const res = await fetch(`${config.apiBaseUrl}/v1/users/me`, {
         headers: { Authorization: `Bearer ${accessToken}` },
       });
       if (res.ok) {
@@ -79,7 +80,7 @@ const UserButton = () => {
             <Avatar className="size-10 hover:opacity-75 transition">
               <AvatarImage
                 className="size-10 hover:opacity-75 transition"
-                src={user?.profilePhoto || "undefined"}
+                src={user?.profilePhoto || "/default-avatar.png"}
               />
               <AvatarFallback className="bg-red-800 text-white">
                 {avatarFallback}

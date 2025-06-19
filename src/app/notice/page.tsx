@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import NoticeForm from '@/components/NoticeForm';
 import NoticeList from '@/components/NoticeList';
 import { useAuth } from '@/providers/AuthProvider';
+import { config } from '@/lib/config';
 
 interface Notice {
   id: string;
@@ -55,7 +56,7 @@ export default function NoticePage() {
 
     setIsLoading(true);
     try {
-      const res = await fetch(`http://localhost:8000/v1/notice/?page=${pageNumber}&limit=${limit}`);
+      const res = await fetch(`${config.apiBaseUrl}/v1/notice/?page=${pageNumber}&limit=${limit}`);
       const data = await res.json();
       if (data.items.length === 0) {
         setHasMore(false);
