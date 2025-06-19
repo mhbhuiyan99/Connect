@@ -9,13 +9,16 @@ interface Session {
 const AuthContext = createContext<{
     session: Session | null;
     setSession: (session: Session | null) => void;
+    loading: boolean;
 }>({
     session: null,
     setSession: () => { },
+    loading: true,
 });
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [session, setSession] = useState<Session | null>(null);
+    const [loading, setLoading] = useState(true);
 
     const loadAccessToken = async () => {
         try {
@@ -50,6 +53,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             // localStorage.removeItem('access_token');
             // localStorage.removeItem('expires_at');
             // localStorage.removeItem('refresh_token');
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -71,7 +76,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }, [session]);
 
     return (
-        <AuthContext.Provider value={{ session, setSession }}>
+        <AuthContext.Provider value={{ session, setSession, loading }}>
             {children}
         </AuthContext.Provider>
     );

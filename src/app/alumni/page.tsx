@@ -106,7 +106,7 @@ export default function AlumniViewPagePage() {
             </div>
           )}
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {!error && <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {alumni.length > 0 ? (
               alumni.map((alum) => (
                 <AlumniCard key={alum.student_id} alumni={alum} />
@@ -114,7 +114,7 @@ export default function AlumniViewPagePage() {
             ) : (
               <p className="text-gray-500 col-span-full">No alumni found.</p>
             )}
-          </div>
+          </div>}
         </div>
       )}
     </div>

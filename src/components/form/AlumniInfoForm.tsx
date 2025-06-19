@@ -14,6 +14,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { FloatingInput } from "@/components/ui/floating-input";
+import { FloatingFileInput } from "../ui/floating-input-file";
 
 const AlumniInfoForm = () => {
   const [form, setForm] = useState({
@@ -39,15 +41,20 @@ const AlumniInfoForm = () => {
     setError(null);
 
     try {
-      const payload = {
-        ...form,
-        skills: form.skills.split(",").map((skill) => skill.trim()),
-      };
-
-      const res = await fetch("/api/alumni", {
+      const res = await fetch("http://localhost:8000/v1/alumni/insert", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({
+          "student_id": form.studentID,
+          "batch": form.batch,
+          "name": form.name,
+          "email": form.email,
+          "current_industry": form.currentIndustry,
+          "job_title": form.jobTitle,
+          "skills": form.skills,
+          "linked_in": form.linkedIn,
+          "facebook": form.facebook,
+        }),
       });
 
       const data = await res.json();
@@ -77,7 +84,7 @@ const AlumniInfoForm = () => {
   };
 
   return (
-    <div className="h-full flex items-center justify-center bg-slate-100">
+    <div className="h-full flex items-center justify-center p-6">
       <Card className="w-[80%] max-w-4xl p-6">
         <CardHeader>
           <CardTitle className="text-center">Alumni Information</CardTitle>
@@ -98,96 +105,100 @@ const AlumniInfoForm = () => {
             onSubmit={handleSubmit}
             className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-6"
           >
-            <Input
+            <FloatingInput
               type="text"
               disabled={pending}
-              placeholder="Student ID"
+              placeholder="CS19000"
+              label="Student ID"
               value={form.studentID}
               onChange={(e) => setForm({ ...form, studentID: e.target.value })}
               required
             />
 
-            <Input
+            <FloatingInput
               type="text"
               disabled={pending}
-              placeholder="Batch"
+              placeholder="19"
               value={form.batch}
+              label="Batch"
               onChange={(e) => setForm({ ...form, batch: e.target.value })}
               required
             />
 
-            <Input
+            <FloatingInput
               type="text"
               disabled={pending}
               placeholder="Full Name"
               value={form.name}
+              label="Name"
               onChange={(e) => setForm({ ...form, name: e.target.value })}
               required
             />
 
-            <Input
+            <FloatingInput
               type="email"
               disabled={pending}
               placeholder="Email"
               value={form.email}
+              label="Email"
               onChange={(e) => setForm({ ...form, email: e.target.value })}
               required
             />
 
-            <Input
+            <FloatingInput
               type="text"
               disabled={pending}
               placeholder="Current Industry"
               value={form.currentIndustry}
+              label="Industry"
               onChange={(e) =>
                 setForm({ ...form, currentIndustry: e.target.value })
               }
               required
             />
 
-            <Input
+            <FloatingInput
               type="text"
               disabled={pending}
               placeholder="Job Title"
               value={form.jobTitle}
+              label="Job Title"
               onChange={(e) => setForm({ ...form, jobTitle: e.target.value })}
               required
             />
 
-            <Input
+            <FloatingInput
               type="text"
               disabled={pending}
               placeholder="Skills (comma separated)"
+              label="Skills"
               value={form.skills}
               onChange={(e) => setForm({ ...form, skills: e.target.value })}
               required
             />
 
-            <Input
+            <FloatingInput
               type="url"
               disabled={pending}
               placeholder="LinkedIn Profile URL"
+              label="LinkedIn"
               value={form.linkedIn}
               onChange={(e) => setForm({ ...form, linkedIn: e.target.value })}
             />
 
-            <Input
+            <FloatingInput
               type="url"
               disabled={pending}
               placeholder="Facebook Profile URL"
+              label="Facebook"
               value={form.facebook}
               onChange={(e) => setForm({ ...form, facebook: e.target.value })}
             />
 
-            <div className="space-y-1">
-              <Input
-                type="file"
-                disabled={pending}
-                accept="image/*"
-                onChange={handleFileChange}
-              />
-              <label className="text-sm font-medium">Profile Photo</label>
-            </div>
+            <FloatingFileInput
+              label="Profile Photo"
+              onChange={handleFileChange}
+            />
 
             <Button
               className="col-span-full justify-self-center w-full md:w-1/2 mt-6"
