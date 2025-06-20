@@ -22,69 +22,33 @@ const Navbar = () => {
         {/* LINKS */}
         <div className="flex gap-6 text-red-800 font-semibold">
           <Link href="/" className="flex items-center gap-2">
-            {/*<Image
-              src="/image/home.png"
-              alt="Home"
-              width={25}
-              height={25}
-              className="w-4 h-4"
-            />*/}
             <span> Home </span>
           </Link>
 
           <Link href="/notice" className="flex items-center gap-2">
-            {/*<Image
-              src="/image/network.png"
-              alt="Network"
-              width={25}
-              height={25}
-              className="w-4 h-4"
-            />*/}
             <span>Notice</span>
           </Link>
 
           <Link href="/AlumniInfo/view" className="flex items-center gap-2">
-            {/*<Image
-              src="/image/job.png"
-              alt="Job"
-              width={25}
-              height={25}
-              className="w-4 h-4"
-            />*/}
             <span> Member Info </span>
           </Link>
-          {/*
-          <Link href="/" className="flex items-center gap-2">
-            <Image src = "/image/gem.png" alt = "Gem" width={25} height={25} className="w-5 h-5"/>
-            <span> Gem </span>
-          </Link>
-          */}
+
           <Link href="/AlumniInfo" className="flex items-center gap-2">
-            {/*<Image
-              src="/image/job.png"
-              alt="Gem"
-              width={25}
-              height={25}
-              className="w-5 h-5"
-            />*/}
             <span>Alumni Form</span>
           </Link>
 
-          <Link
-            href="/"
-            className="flex items-center gap-2"
-          >
+          <Link href="/" className="flex items-center gap-2">
             <span>Events</span>
           </Link>
 
-          <div className="hidden md:flex p-1 items-center rounded-xl border border-red-800 font-medium">
-            <input
-              type="text"
-              placeholder="search..."
-              className="bg-transparent outline-none"
-            />
-            {/*<Image src = "/image/search.png" alt = "" width={100%} height={100%} />*/}
-          </div>
+          <Link href="/" className="flex items-center gap-2">
+            <span>Gallery</span>
+          </Link>
+
+          <Link href="/" className="flex items-center gap-2">
+            <span>Reunion</span> {/*re.. reg*/}
+          </Link>
+
         </div>
       </div>
 

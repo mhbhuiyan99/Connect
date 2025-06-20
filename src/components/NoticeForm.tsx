@@ -1,8 +1,18 @@
-// components/NoticeForm.tsx
 'use client';
 
 import { useState } from 'react';
 import { useSession } from 'next-auth/react';
+import { TriangleAlert } from 'lucide-react';
+
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardHeader,
+  CardContent,
+  CardTitle,
+  CardDescription,
+} from '@/components/ui/card';
 
 export default function NoticeForm({ onNewNotice }: { onNewNotice: (notice: any) => void }) {
   const { data: session } = useSession();
@@ -10,12 +20,15 @@ export default function NoticeForm({ onNewNotice }: { onNewNotice: (notice: any)
   const [content, setContent] = useState('');
   const [image, setImage] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!session) return;
 
     setIsSubmitting(true);
+    setError(null);
+
     try {
       const formData = new FormData();
       formData.append('title', title);
@@ -35,67 +48,78 @@ export default function NoticeForm({ onNewNotice }: { onNewNotice: (notice: any)
         setTitle('');
         setContent('');
         setImage(null);
+      } else {
+        const errorData = await response.json();
+        setError(errorData.message || 'Failed to post notice');
       }
-    } catch (error) {
-      console.error('Error creating notice:', error);
+    } catch (err) {
+      setError('An error occurred while posting the notice');
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md">
-      <h2 className="text-xl font-semibold mb-4">Post a Notice</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">
-            Title
-          </label>
-          <input
-            type="text"
-            id="title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            required
-          />
-        </div>
-        
-        <div className="mb-4">
-          <label htmlFor="content" className="block text-sm font-medium text-gray-700 mb-1">
-            Content
-          </label>
-          <textarea
-            id="content"
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            rows={4}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            required
-          />
-        </div>
-        
-        <div className="mb-4">
-          <label htmlFor="image" className="block text-sm font-medium text-gray-700 mb-1">
-            Image (Optional)
-          </label>
-          <input
-            type="file"
-            id="image"
-            accept="image/*"
-            onChange={(e) => setImage(e.target.files?.[0] || null)}
-            className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-          />
-        </div>
-        
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          {isSubmitting ? 'Posting...' : 'Post Notice'}
-        </button>
-      </form>
+    <div className="h-full flex items-center justify-center bg-slate-100">
+      <Card className="w-[100%] max-w-4xl p-6">
+        <CardHeader>
+          <CardTitle className="text-center">Post a Notice</CardTitle>
+          <CardDescription className="text-sm text-center text-accent-foreground">
+            Only admins can post notices
+          </CardDescription>
+        </CardHeader>
+
+        {!!error && (
+          <div className="bg-destructive/15 p-3 rounded-md flex items-center gap-x-2 text-sm text-destructive mb-6">
+            <TriangleAlert />
+            <p>{error}</p>
+          </div>
+        )}
+
+        <CardContent className="px-2 sm:px-6">
+          <form
+            onSubmit={handleSubmit}
+            className="grid grid-cols-1 gap-y-6"
+          >
+            <Input
+              type="text"
+              placeholder="Title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              disabled={isSubmitting}
+              required
+            />
+
+            <textarea
+              placeholder="Content"
+              rows={5}
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              disabled={isSubmitting}
+              required
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+            />
+
+            <div className="space-y-1">
+              <Input
+                type="file"
+                accept="image/*"
+                onChange={(e) => setImage(e.target.files?.[0] || null)}
+                disabled={isSubmitting}
+              />
+              <label className="text-sm font-medium">Optional Image</label>
+            </div>
+
+            <Button
+              className="justify-self-center w-full md:w-1/2 mt-6"
+              size="lg"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? 'Posting...' : 'Post Notice'}
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   );
 }
