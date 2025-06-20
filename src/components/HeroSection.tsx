@@ -1,7 +1,5 @@
 import Link from "next/link";
 
-
-
 const HeroSection = () => {
   return (
     <section className="bg-gradient-to-r from-blue-800 to-blue-600 text-white py-16 text-center">

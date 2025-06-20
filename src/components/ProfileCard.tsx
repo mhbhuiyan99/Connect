@@ -1,4 +1,3 @@
-import { Link } from "lucide-react";
 import Image from "next/image";
 import NextLink from 'next/link'; 
 

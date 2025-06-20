@@ -53,7 +53,7 @@ const handler = NextAuth({
     ],
     callbacks: {
 
-        async signIn({account, profile}){
+        async signIn({profile}){
             await connectToDatabase();
             const existingUser = await User.findOne({email: profile?.email});
 

@@ -1,11 +1,5 @@
 "use client"
 
-import LeftMenu from "@/components/LeftMenu";
-import RightMenu from "@/components/RightMenu";
-import AddPost from "@/components/AddPost";
-import Feed from "@/components/Feed";
-import UserButton from "@/components/user-button";
-import { SessionProvider } from "next-auth/react";
 import HeroSection from "@/components/HeroSection";
 import AboutSection from "@/components/AboutSection";
 

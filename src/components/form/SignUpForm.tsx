@@ -22,7 +22,6 @@ import { TriangleAlert } from "lucide-react";
 
 import Link from "next/link";
 import { useState } from "react";
-import Email from "next-auth/providers/email";
 import { signIn } from "next-auth/react";
 
 
