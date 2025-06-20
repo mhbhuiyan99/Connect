@@ -1,4 +1,3 @@
-import Feed from "@/components/Feed";
 import LeftMenu from "@/components/LeftMenu";
 import RightMenu from "@/components/RightMenu";
 import Image from "next/image";
@@ -29,30 +28,14 @@ const ProfilePage = () => {
                 />
               </div>
               <h1 className="mt-20 mb-4 text-2xl font-medium">User name</h1>
-              {/*
-              <div className="flex items-center justify-center gap-12 mb-4">
-                <div className="flex flex-col items-center">
-                  <span className="font-medium">123</span>
-                  <span className="test-sm">Posts</span>
-                </div>
-                <div className="flex flex-col items-center">
-                  <span className="font-medium">1.2k</span>
-                  <span className="test-sm">Followers</span>
-                </div>
-                <div className="flex flex-col items-center">
-                  <span className="font-medium">1.7k</span>
-                  <span className="test-sm">Following</span>
-                </div>
-              </div>
-              */}
+              
             </div>
-            <Feed />
           </div>
         </div>
 
         <div className="hidden lg:block w-[30%]">
           {" "}
-          <RightMenu userId="test" />{" "}
+          <RightMenu/>{" "}
         </div>
       </div>
     );
