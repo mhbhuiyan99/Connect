@@ -54,12 +54,7 @@ const Navbar = () => {
             />*/}
             <span> Member Info </span>
           </Link>
-          {/*
-          <Link href="/" className="flex items-center gap-2">
-            <Image src = "/image/gem.png" alt = "Gem" width={25} height={25} className="w-5 h-5"/>
-            <span> Gem </span>
-          </Link>
-          */}
+         
           {
             session?.accessToken && (
               <Link href="/alumni/form" className="flex items-center gap-2">
@@ -77,6 +72,13 @@ const Navbar = () => {
           <Link href="/events" className="flex items-center gap-2">
             <span>Events</span>
           </Link>
+           <Link href="/" className="flex items-center gap-2">
+            <span>Gallery</span>
+          </Link>
+
+          <Link href="/" className="flex items-center gap-2">
+            <span>Reunion</span> {/*re.. reg*/}
+          </Link>
         </div>
       </div>
 
@@ -88,28 +90,7 @@ const Navbar = () => {
           <UserButton />{" "}
         </Link> */}
 
-        {/*<Link className={buttonVariants() } href='/sign-in'> Sign In </Link>
-          <SignedIn>
-              <div className="cursor-pointer">
-                <Image src = "/image/people.png" alt = "" width={25} height={25}></Image>
-              </div>
-
-              <div className="cursor-pointer">
-                <Image src = "/image/chat-box.png" alt = "" width={25} height={25}></Image>
-              </div>
-
-              <div className="cursor-pointer">
-                <Image src = "/image/notification.png" alt = "" width={25} height={25}></Image>
-              </div>
-          </SignedIn>
-
-          <SignedOut>
-            <div className = "flex items-center gap-2 font-bold text-sm text-red-800">
-              <Image src="/image/login.png" alt = "" width = {20} height = {20} />
-              <Link href = "/sign-in"> LogIn / SignUp </Link>
-            </div>
-          </SignedOut>
-        */}
+        
 
         <MobileMenu />
       </div>
