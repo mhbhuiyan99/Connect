@@ -4,7 +4,7 @@ import AboutSection from '@/components/AboutSection';
 import HeroSection from '@/components/HeroSection';
 import NoticeBoard from '@/components/NoticeBoard';
 
-export default function Home({ notices, news }: { notices: any[]; news: any[] }) {
+export default function Home() {
   return (
     <div className="space-y-16">
       <HeroSection />
@@ -12,10 +12,10 @@ export default function Home({ notices, news }: { notices: any[]; news: any[] })
       <div className="flex flex-col lg:flex-row gap-6">
         <main className="flex-1 space-y-16">
           <section className="bg-white rounded-xl p-6 shadow-md">
-            <AboutSection/>
+            <AboutSection />
           </section>
 
-          <NoticeBoard notices={notices} />
+          <NoticeBoard />
         </main>
       </div>
     </div>

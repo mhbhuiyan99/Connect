@@ -1,35 +1,46 @@
 'use client';
 
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { config } from '@/lib/config';
+import Notice from '@/models/Notice';
+import NoticeRotator from './NoticeRotator';
 
-export default function NoticeBoard({ notices }: { notices: any[] }) {
-  const safeNotices = Array.isArray(notices) ? notices : [];
+export default function NoticeBoard() {
+  const [isLoading, setIsLoading] = useState(true);
+  const [notices, setNotices] = useState<Notice[]>([]);
 
-  const latest = [...safeNotices]
-    .sort(
-      (a, b) =>
-        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-    )
-    .slice(0, 5);
+  const fetchNotices = async (pageNumber: number, limit: number = 5) => {
+    try {
+      const res = await fetch(`${config.apiBaseUrl}/v1/notice/?page=${pageNumber}&limit=${limit}`);
+      const data = await res.json();
+
+      if (data.items.length === 0) {
+        throw new Error("No more notices");
+      } else {
+        setNotices([...data.items].slice(0, 5));
+      }
+    } catch (err) {
+      console.error("Error fetching notices:", err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  useEffect(() => { fetchNotices(1) }, []);
+
+  if (isLoading) {
+    return (
+      <div className="bg-white rounded-lg shadow p-4">
+        <h2 className="text-xl font-bold mb-3 border-b pb-2">Notice Board</h2>
+        <p>Loading notices...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-white rounded-lg shadow p-4">
       <h2 className="text-xl font-bold mb-3 border-b pb-2">Notice Board</h2>
-      <ul className="space-y-2">
-        {latest.map((notice) => (
-          <li key={notice.id}>
-            <Link
-              href={`/notice/${notice.id}`}
-              className="text-blue-600 hover:underline text-sm"
-            >
-              {notice.title}
-            </Link>
-            <p className="text-xs text-gray-500">
-              {new Date(notice.created_at).toLocaleDateString()}
-            </p>
-          </li>
-        ))}
-      </ul>
+      <NoticeRotator notices={notices} createdAtDate={(dateStr) => new Date(dateStr).toLocaleString()} />
       <Link
         href="/notice"
         className="block text-right text-blue-500 text-sm mt-3 hover:underline"

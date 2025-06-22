@@ -1,53 +1,174 @@
 "use client";
 
-import React from "react";
+import { config } from "@/lib/config";
+import Alumni from "@/models/Alumni";
+import { useAuth } from "@/providers/AuthProvider";
+import React, { useEffect, useState } from "react";
 
 type User = {
   id: string;
   name: string;
-  batch: string;
-  picture: string;
+  student_id: string;
+  email: string;
+  role: string;
+  approved: boolean;
+  bio: string;
+  created_at: string;
+  updated_at: string;
+  profile_photo: string;
 };
 
-const dummyUser: User = {
-  id: "12345",
-  name: "matha nosto",
-  batch: "Batch 222",
-  picture: "https://randomuser.me/api/portraits/men/75.jpg",
-};
+
 
 export default function AdminApproval() {
+  const [showFormApprovals, setShowFormApprovals] = useState(false);
+  const [showUserApprovals, setShowUserApprovals] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const { session, loading } = useAuth();
+
+  const [alumnis, setAlumnis] = useState<Alumni[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
+
+  const getAlumnis = async (pageNumber: number, limit: number = 10) => {
+    setIsLoading(true);
+    try {
+      const res = await fetch(`${config.apiBaseUrl}/v1/auth/approve/alumni/pending/?page=${pageNumber}&limit=${limit}`,
+        { headers: { Authorization: `Bearer ${session?.accessToken}` } }
+      );
+      const data = await res.json();
+      setAlumnis(data);
+    } catch (err) {
+      console.error("Error fetching Aliumni:", err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const getUsers = async (pageNumber: number, limit: number = 10) => {
+    setIsLoading(true);
+    try {
+      const res = await fetch(`${config.apiBaseUrl}/v1/auth/approve/user/pending/?page=${pageNumber}&limit=${limit}`,
+        { headers: { Authorization: `Bearer ${session?.accessToken}` } }
+      );
+      const data = await res.json();
+      setUsers(data);
+    } catch (err) {
+      console.error("Error fetching Users:", err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  useEffect(() => {
+    if (!session || loading) return;
+    if (!loading && session && !isLoading) {
+      getAlumnis(1);
+      getUsers(1);
+    }
+  }, [session, loading]);
+
+  const renderApprovalAlumniCards = (users: Alumni[]) => (
+    <div className="space-y-4 mt-4">
+      {users.map((user) => (
+        <div
+          key={user.id}
+          className="flex items-center border rounded-lg p-4 shadow-md"
+        >
+          <img
+            src={user.profile_photo || "/default-avatar.png"}
+            alt={user.name}
+            className="w-20 h-20 rounded-full object-cover"
+          />
+          <div className="flex-1 ml-6">
+            <p className="text-xl font-semibold">{user.name}</p>
+            <p className="text-gray-600">Student ID: {user.student_id}</p>
+            <p className="text-gray-600">Batch: {user.batch}</p>
+            <p className="text-gray-600">Email: {user.email}</p>
+            <p className="text-gray-600">Role: {user.role}</p>
+            <p className="text-gray-600">Current Industry: {user.current_industry}</p>
+            <p className="text-gray-600">Job Title: {user.job_title}</p>
+            {user.linked_in && <p className="text-gray-600">Linked In: {user.linked_in}</p>}
+            {user.facebook && <p className="text-gray-600">Facebook: {user.facebook}</p>}
+            <p className="text-gray-600">Skills: {user.skills.join(", ")}</p>
+          </div>
+          <div className="flex flex-col gap-2 ml-6">
+            <button
+              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+              onClick={() => alert(`Approved ${user.name}`)}
+            >
+              Approve
+            </button>
+            <button
+              className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition"
+              onClick={() => alert(`Denied ${user.name}`)}
+            >
+              Deny
+            </button>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+
+  const renderApprovalCards = (users: User[]) => (
+    <div className="space-y-4 mt-4">
+      {users.map((user) => (
+        <div
+          key={user.id}
+          className="flex items-center border rounded-lg p-4 shadow-md"
+        >
+          <div className="flex-1 ml-6">
+            <p className="text-xl font-semibold">{user.name}</p>
+            <p className="text-gray-600">Student ID: {user.student_id}</p>
+            <p className="text-gray-600">Email: {user.email}</p>
+            <p className="text-gray-600">Role: {user.role}</p>
+            <p className="text-gray-600">Created At: {new Date(user.created_at).toLocaleString()}</p>
+            <p className="text-gray-600">Updated At: {new Date(user.updated_at).toLocaleString()}</p>
+          </div>
+          <div className="flex flex-col gap-2 ml-6">
+            <button
+              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+              onClick={() => alert(`Approved ${user.name}`)}
+            >
+              Approve
+            </button>
+            <button
+              className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition"
+              onClick={() => alert(`Denied ${user.name}`)}
+            >
+              Deny
+            </button>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+
+
   return (
-    <div className="max-w-3xl mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-8">Admin Approval</h1>
+    <div className="max-w-4xl mx-auto p-6">
+      <h1 className="text-3xl font-bold mb-6">Admin Approval</h1>
 
-      <div className="flex items-center border rounded-lg p-4 shadow-md">
-        <img
-          src={dummyUser.picture}
-          alt={dummyUser.name}
-          className="w-24 h-24 rounded-full object-cover"
-        />
+      {/* Alumni Form Approvals */}
+      <div className="mb-6">
+        <button
+          onClick={() => setShowFormApprovals(!showFormApprovals)}
+          className="w-full flex justify-between items-center bg-gray-200 px-4 py-3 rounded text-lg font-semibold hover:bg-gray-300 transition"
+        >
+          <span>Alumni Form Approvals</span>
+          <span>{showFormApprovals ? "▲" : "▼"}</span>
+        </button>
+        {showFormApprovals && renderApprovalAlumniCards(alumnis)}
+      </div>
 
-        <div className="flex-1 ml-6">
-          <p className="text-xl font-semibold">{dummyUser.name}</p>
-          <p className="text-gray-600">ID: {dummyUser.id}</p>
-          <p className="text-gray-600">{dummyUser.batch}</p>
-        </div>
-
-        <div className="flex flex-col gap-3 ml-6">
-          <button
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
-            onClick={() => alert(`Approved ${dummyUser.name}`)}
-          >
-            Approve
-          </button>
-          <button
-            className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition"
-            onClick={() => alert(`Denied ${dummyUser.name}`)}
-          >
-            Deny
-          </button>
-        </div>
+      {/* Alumni User Approvals */}
+      <div>
+        <button
+          onClick={() => setShowUserApprovals(!showUserApprovals)}
+          className="w-full flex justify-between items-center bg-gray-200 px-4 py-3 rounded text-lg font-semibold hover:bg-gray-300 transition"
+        >
+          <span>Alumni User Approvals</span>
+          <span>{showUserApprovals ? "▲" : "▼"}</span>
+        </button>
+        {showUserApprovals && renderApprovalCards(users)}
       </div>
     </div>
   );
