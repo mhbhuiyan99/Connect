@@ -79,6 +79,9 @@ const Navbar = () => {
           <Link href="/" className="flex items-center gap-2">
             <span>Reunion</span> {/*re.. reg*/}
           </Link>
+          <Link href="/admin_approval" className="flex items-center gap-2">
+            <span>Admin Approval</span> {/*re.. reg*/}
+          </Link>
         </div>
       </div>
 
