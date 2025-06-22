@@ -20,12 +20,25 @@ export default function NoticeForm({ onNewNotice }: { onNewNotice: (notice: any)
     setIsSubmitting(true);
 
     try {
+      var imageUrl = "";
+      if (image) {
+        const formData = new FormData();
+        formData.append("file", image);
+
+        const uploadedImage = await fetch(`${config.apiBaseUrl}/v1/image/upload`, {
+          method: "POST",
+          body: formData,
+        })
+        const imgData = await uploadedImage.json();
+        imageUrl = `${config.apiBaseUrl}${imgData.image_url}`
+      }
+
       const response = await fetch(`${config.apiBaseUrl}/v1/notice/`, {
         method: 'POST',
         body: JSON.stringify({
           title: title,
           content: content,
-          image_url: image
+          image_url: imageUrl
         }),
         headers: {
           'Content-Type': 'application/json',
