@@ -3,13 +3,14 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import AlumniCard, { Alumni } from "@/components/AlumniCard";
 import { ImSpinner2 } from "react-icons/im";
+import { config } from "@/lib/config";
 const sampleAlumni: Alumni = {
   name: "Hasibul Kabir",
   email: "hasibul@example.com",
   linked_in: "https://linkedin.com/in/hasibulkabir",
   facebook: "https://facebook.com/hasibulkabir",
   skills: ["JavaScript", "React", "Next.js"],
-  photo: "/default-avatar.png", // fallback to default if empty
+  profile_photo: "/default-avatar.png", // fallback to default if empty
   student_id: "ce25003",
   batch: 0,
   current_industry: "Baper Hotel Pvt. Ltd.",
@@ -26,7 +27,7 @@ export default function BatchDetailsPage() {
   useEffect(() => {
     const fetchAlumni = async () => {
       const res = await fetch(
-        `http://127.0.0.1:8000/v1/alumni/?batch=${batchID}`
+        `${config.apiBaseUrl}/v1/alumni/?batch=${batchID}`
       );
       const data = await res.json();
       if (res.ok) {

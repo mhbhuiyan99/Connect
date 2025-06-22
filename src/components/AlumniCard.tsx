@@ -12,7 +12,7 @@ export interface Alumni {
     facebook: string;
     role: string;
     sorting_order: number;
-    photo: string;
+    profile_photo: string;
 }
 
 
@@ -21,7 +21,7 @@ export default function AlumniCard({ alumni }: { alumni: Alumni }) {
         <div className="border rounded-xl p-4 bg-white shadow hover:shadow-lg transition-all">
             <div className="flex flex-col items-center text-center">
                 <img
-                    src={alumni.photo || "/default-avatar.png"}
+                    src={alumni.profile_photo || "/default-avatar.png"}
                     alt={alumni.name}
                     className="w-24 h-24 rounded-full object-cover mb-3 border"
                 />

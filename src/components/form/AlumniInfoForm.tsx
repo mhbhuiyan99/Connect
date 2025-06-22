@@ -29,8 +29,10 @@ const AlumniInfoForm = () => {
     skills: "",
     linkedIn: "",
     facebook: "",
-    photo: "",
   });
+
+  const [image, setImage] = useState<File | null>(null);
+
 
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -42,6 +44,19 @@ const AlumniInfoForm = () => {
     setError(null);
 
     try {
+      var imageUrl = "";
+      if (image) {
+        const formData = new FormData();
+        formData.append("file", image);
+
+        const uploadedImage = await fetch(`${config.apiBaseUrl}/v1/image/upload`, {
+          method: "POST",
+          body: formData,
+        })
+        const imgData = await uploadedImage.json();
+        imageUrl = `${config.apiBaseUrl}${imgData.image_url}`
+      }
+
       const res = await fetch(`${config.apiBaseUrl}/v1/alumni/insert`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -55,6 +70,7 @@ const AlumniInfoForm = () => {
           "skills": form.skills,
           "linked_in": form.linkedIn,
           "facebook": form.facebook,
+          "profile_photo": imageUrl
         }),
       });
 
@@ -75,12 +91,14 @@ const AlumniInfoForm = () => {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setForm((prev) => ({ ...prev, photo: reader.result as string }));
-      };
-      reader.readAsDataURL(file);
+      const selectedFile = e.target.files[0];
+      setImage(selectedFile);
+
+      // const reader = new FileReader();
+      // reader.onloadend = () => {
+      //   setForm((prev) => ({ ...prev, photo: reader.result as string }));
+      // };
+      // reader.readAsDataURL(file);
     }
   };
 

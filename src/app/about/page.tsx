@@ -1,12 +1,9 @@
-import AboutSection from "@/components/AboutSection";
+import AboutFull from '@/components/AboutFull';
 
-
-const page = () => {
+export default function AboutFullPage() {
     return (
-        <div className="w-full">
-            <AboutSection />
+        <div className="py-12 px-4 max-w-4xl mx-auto">
+            <AboutFull />
         </div>
     );
 }
-
-export default page;

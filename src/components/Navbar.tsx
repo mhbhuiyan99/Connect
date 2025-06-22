@@ -54,21 +54,17 @@ const Navbar = () => {
             />*/}
             <span> Member Info </span>
           </Link>
-         
-          {
-            session?.accessToken && (
-              <Link href="/alumni/form" className="flex items-center gap-2">
-                {/*<Image
+
+          <Link href="/alumni/form" className="flex items-center gap-2">
+            {/*<Image
                   src="/image/job.png"
                   alt="Gem"
                   width={25}
                   height={25}
                   className="w-5 h-5"
                 />*/}
-                <span>Alumni Form</span>
-              </Link>
-            )
-          }
+            <span>Alumni Form</span>
+          </Link>
           <Link href="/events" className="flex items-center gap-2">
             <span>Events</span>
           </Link>
@@ -89,7 +85,7 @@ const Navbar = () => {
           <UserButton />{" "}
         </Link> */}
 
-        
+
 
         <MobileMenu />
       </div>
