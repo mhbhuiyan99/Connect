@@ -109,7 +109,7 @@ const AlumniInfoForm = () => {
             <FloatingInput
               type="text"
               disabled={pending}
-              placeholder="CS19000"
+              placeholder="CE19000"
               label="Student ID"
               value={form.studentID}
               onChange={(e) => setForm({ ...form, studentID: e.target.value })}
@@ -119,7 +119,7 @@ const AlumniInfoForm = () => {
             <FloatingInput
               type="text"
               disabled={pending}
-              placeholder="19"
+              placeholder="17"
               value={form.batch}
               label="Batch"
               onChange={(e) => setForm({ ...form, batch: e.target.value })}

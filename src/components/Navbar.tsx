@@ -72,10 +72,6 @@ const Navbar = () => {
           <Link href="/events" className="flex items-center gap-2">
             <span>Events</span>
           </Link>
-           <Link href="/" className="flex items-center gap-2">
-            <span>Gallery</span>
-          </Link>
-
           <Link href="/" className="flex items-center gap-2">
             <span>Reunion</span> {/*re.. reg*/}
           </Link>

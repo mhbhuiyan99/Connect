@@ -14,7 +14,7 @@ const AboutSection = () => {
           of the beloved alma mater into an institution of higher learning in technical and science
           education that is among the best in the world; and for contributing to accelerated and
           sustainable national ...
-          <Link href="/about" className="text-red-800 hover:underline ml-1">
+          <Link href="/AboutFull" className="text-red-800 hover:underline ml-1">
             see more
           </Link>
         </p>
