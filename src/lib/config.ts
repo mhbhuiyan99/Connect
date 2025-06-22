@@ -9,4 +9,5 @@ function getEnv(key: string, fallback?: string): string {
 export const config = {
     apiBaseUrl: getEnv("NEXT_PUBLIC_API_BASE_URL", "http://localhost:8000"),
     appName: getEnv("NEXT_PUBLIC_APP_NAME", "MBSTU Alumni Portal"),
+    description: getEnv("NEXT_PUBLIC_DESCRIPTION", "Alumni Portal for CSE,MBSTU"),
 };

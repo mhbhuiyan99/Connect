@@ -11,10 +11,12 @@ const AuthContext = createContext<{
     session: Session | null;
     setSession: (session: Session | null) => void;
     loading: boolean;
+    user: any
 }>({
     session: null,
     setSession: () => { },
     loading: true,
+    user: null
 });
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -60,7 +62,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
 
     // Load from localStorage
-    useEffect(() => { loadAccessToken() }, []);
+    useEffect(() => {
+        const user = localStorage.getItem('user');
+        if (user) setSession(JSON.parse(user));
+        loadAccessToken();
+    }, []);
 
     // Auto refresh logic
     useEffect(() => {
@@ -77,7 +83,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }, [session]);
 
     return (
-        <AuthContext.Provider value={{ session, setSession, loading }}>
+        <AuthContext.Provider value={{ session, setSession, loading, user: null }}>
             {children}
         </AuthContext.Provider>
     );

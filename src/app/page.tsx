@@ -2,21 +2,19 @@
 
 import HeroSection from "@/components/HeroSection";
 import AboutSection from "@/components/AboutSection";
+import { useAuth } from "@/providers/AuthProvider";
 
 
 const Homepage = () => {
-  return(
+  return (
     <div className="space-y-16">
-      <HeroSection/>
+      <HeroSection />
       <div className="flex flex-col lg:flex-row gap-6">
         <main className="flex-1 space-y-16">
-          <AboutSection/>
+          <AboutSection />
         </main>
-        
       </div>
-
-
-    {/*
+      {/*
       <div className="hidden xl:block w-[20%]"> <LeftMenu type="home"/> </div>
 
       <div className="w-full lg:w-[70%] xl:w-[70%]">
