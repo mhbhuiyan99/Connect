@@ -6,9 +6,17 @@ import Image from 'next/image';
 import { buttonVariants } from './ui/button'
 import UserButton from "./user-button";
 import { useAuth } from "@/providers/AuthProvider";
+import { useEffect, useState } from "react";
 
 const Navbar = () => {
-  const { session } = useAuth();
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
 
   return (
     <div className="h-24 flex items-center justify-between">
@@ -71,9 +79,12 @@ const Navbar = () => {
           <Link href="/" className="flex items-center gap-2">
             <span>Reunion</span> {/*re.. reg*/}
           </Link>
-          <Link href="/admin_approval" className="flex items-center gap-2">
-            <span>Admin Approval</span> {/*re.. reg*/}
-          </Link>
+          {
+            user?.role == "admin" &&
+            <Link href="/admin_approval" className="flex items-center gap-2">
+              <span>Admin Approval</span> {/*re.. reg*/}
+            </Link>
+          }
         </div>
       </div>
 

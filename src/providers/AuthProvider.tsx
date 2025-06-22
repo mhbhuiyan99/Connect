@@ -21,6 +21,7 @@ const AuthContext = createContext<{
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [session, setSession] = useState<Session | null>(null);
+    const [user, setUser] = useState<any>(null);
     const [loading, setLoading] = useState(true);
 
     const loadAccessToken = async () => {
@@ -64,7 +65,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // Load from localStorage
     useEffect(() => {
         const user = localStorage.getItem('user');
-        if (user) setSession(JSON.parse(user));
+        if (user) setUser(JSON.parse(user));
         loadAccessToken();
     }, []);
 
