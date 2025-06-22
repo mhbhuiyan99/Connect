@@ -4,6 +4,7 @@ import { config } from "@/lib/config";
 import Alumni from "@/models/Alumni";
 import { useAuth } from "@/providers/AuthProvider";
 import React, { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 type User = {
   id: string;
@@ -32,7 +33,7 @@ export default function AdminApproval() {
   const getAlumnis = async (pageNumber: number, limit: number = 10) => {
     setIsLoading(true);
     try {
-      const res = await fetch(`${config.apiBaseUrl}/v1/auth/approve/alumni/pending/?page=${pageNumber}&limit=${limit}`,
+      const res = await fetch(`${config.apiBaseUrl}/v1/auth/approve/alumni/pending?page=${pageNumber}&limit=${limit}`,
         { headers: { Authorization: `Bearer ${session?.accessToken}` } }
       );
       const data = await res.json();
@@ -46,7 +47,7 @@ export default function AdminApproval() {
   const getUsers = async (pageNumber: number, limit: number = 10) => {
     setIsLoading(true);
     try {
-      const res = await fetch(`${config.apiBaseUrl}/v1/auth/approve/user/pending/?page=${pageNumber}&limit=${limit}`,
+      const res = await fetch(`${config.apiBaseUrl}/v1/auth/approve/user/pending?page=${pageNumber}&limit=${limit}`,
         { headers: { Authorization: `Bearer ${session?.accessToken}` } }
       );
       const data = await res.json();
@@ -64,6 +65,47 @@ export default function AdminApproval() {
       getUsers(1);
     }
   }, [session, loading]);
+
+
+  async function handleAlumniApprove(alumniId: string, status: boolean) {
+    try {
+      const res = await fetch(`${config.apiBaseUrl}/v1/auth/approve/alumni`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${session?.accessToken}`, "Content-Type": "application/json" },
+        body: JSON.stringify({
+          "user_id": alumniId,
+          "status": status,
+        }),
+      });
+      if (res.ok) {
+        getAlumnis(1);
+        alert("Alumni approved successfully");
+      }
+    } catch (err) {
+      console.error("Error approving Alumni:", err);
+      toast.error("Error approving Alumni");
+    }
+  }
+
+  async function handleApprove(alumniId: string, status: boolean) {
+    try {
+      const res = await fetch(`${config.apiBaseUrl}/v1/auth/approve/user`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${session?.accessToken}`, "Content-Type": "application/json" },
+        body: JSON.stringify({
+          "user_id": alumniId,
+          "status": status,
+        }),
+      });
+      if (res.ok) {
+        getUsers(1);
+        alert("User approved successfully");
+      }
+    } catch (err) {
+      console.error("Error approving User:", err);
+      toast.error("Error approving Alumni");
+    }
+  }
 
   const renderApprovalAlumniCards = (users: Alumni[]) => (
     <div className="space-y-4 mt-4">
@@ -92,13 +134,13 @@ export default function AdminApproval() {
           <div className="flex flex-col gap-2 ml-6">
             <button
               className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
-              onClick={() => alert(`Approved ${user.name}`)}
+              onClick={() => handleAlumniApprove(user.id, true)}
             >
               Approve
             </button>
             <button
               className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition"
-              onClick={() => alert(`Denied ${user.name}`)}
+              onClick={() => handleAlumniApprove(user.id, false)}
             >
               Deny
             </button>
@@ -126,13 +168,13 @@ export default function AdminApproval() {
           <div className="flex flex-col gap-2 ml-6">
             <button
               className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
-              onClick={() => alert(`Approved ${user.name}`)}
+              onClick={() => handleApprove(user.id, true)}
             >
               Approve
             </button>
             <button
               className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition"
-              onClick={() => alert(`Denied ${user.name}`)}
+              onClick={() => handleApprove(user.id, false)}
             >
               Deny
             </button>
