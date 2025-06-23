@@ -34,7 +34,7 @@ export default function Footer() {
                         </div>
                     </div>
 
-                    {/* Academic Column */}
+                    {/* Academic Column 
                     <div className="mb-6 md:mb-0 w-full md:w-1/4">
                         <h4 className="text-lg font-semibold mb-4 text-gray-300">Academic</h4>
                         <ul className="space-y-2 text-sm text-gray-400">
@@ -47,7 +47,7 @@ export default function Footer() {
                             <li><Link href="/faculty-of-arts/" target="_blank" rel="nofollow">Faculty of Arts</Link></li>
                         </ul>
                     </div>
-
+                    */}
                     {/* Useful Links Column */}
                     <div className="mb-6 md:mb-0 w-full md:w-1/4">
                         <h4 className="text-lg font-semibold mb-4 text-gray-300">Useful Links</h4>

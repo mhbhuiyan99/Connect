@@ -26,6 +26,7 @@ export default function AlumniCard({ alumni }: { alumni: Alumni }) {
                     className="w-24 h-24 rounded-full object-cover mb-3 border"
                 />
                 <h3 className="text-xl font-semibold">{alumni.name}</h3>
+                <p className="text-sm text-gray-500">{alumni.student_id}</p>
                 <p className="text-sm text-gray-600">{alumni.job_title}</p>
                 <p className="text-sm text-gray-700 font-medium mt-0.5">{alumni.current_industry}</p>
 
