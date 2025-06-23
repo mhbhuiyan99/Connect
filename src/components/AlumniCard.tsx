@@ -28,7 +28,7 @@ export default function AlumniCard({ alumni }: { alumni: Alumni }) {
                 <h3 className="text-xl font-semibold">{alumni.name}</h3>
                 <p className="text-sm text-gray-500">{alumni.student_id}</p>
                 <p className="text-sm text-gray-600">{alumni.job_title}</p>
-                <p className="text-sm text-gray-700 font-medium mt-0.5">{alumni.current_industry}</p>
+                <p className="text-sm text-black font-medium mt-0.5">{alumni.current_industry}</p>
 
                 {alumni.skills.length > 0 && (
                     <p className="text-sm text-gray-700 mt-2">
