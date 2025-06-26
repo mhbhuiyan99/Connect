@@ -15,6 +15,7 @@ export const FloatingInput: React.FC<FloatingInputProps> = ({
   onChange,
   type = "text",
   placeholder = "",
+  children = null,
   ...props
 }) => {
   const [isFocused, setIsFocused] = useState(false);
@@ -36,6 +37,7 @@ export const FloatingInput: React.FC<FloatingInputProps> = ({
 
         {...props}
       />
+      {children}
       <label
         className={clsx(
           "absolute left-2.5 px-1 bg-white text-gray-500 text-sm transition-all font-semibold text-[15px]",

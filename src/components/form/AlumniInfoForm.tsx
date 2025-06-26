@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { TriangleAlert } from "lucide-react";
@@ -16,6 +16,7 @@ import {
 import { FloatingInput } from "@/components/ui/floating-input";
 import { FloatingFileInput } from "../ui/floating-input-file";
 import { config } from "@/lib/config";
+import CompanySection from "../CompanySection";
 
 const AlumniInfoForm = () => {
   const [form, setForm] = useState({
@@ -25,12 +26,14 @@ const AlumniInfoForm = () => {
     email: "",
     linkedIn: "",
     facebook: "",
+    github: "",
+    skills: "",
   });
 
   const [companySections, setCompanySections] = useState([
     {
-      currentIndustry: "",
-      skills: "",
+      industry: "",
+      software: "",
       position: "",
       responsibilities: "",
       platform: "",
@@ -38,7 +41,7 @@ const AlumniInfoForm = () => {
   ]);
 
   const [showExtraFieldsFor, setShowExtraFieldsFor] = useState([false]);
-
+  const [presetSkills, setPresetSkills] = useState<string[]>(["Python", "MongoDB"]);
   const [image, setImage] = useState<File | null>(null);
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -101,6 +104,28 @@ const AlumniInfoForm = () => {
     }
   };
 
+  const handleAddCompany = () => {
+    setCompanySections([
+      ...companySections,
+      {
+        industry: "",
+        software: "",
+        position: "",
+        responsibilities: "",
+        platform: "",
+      },
+    ]);
+    setShowExtraFieldsFor([...showExtraFieldsFor, false]);
+  };
+
+  const handleRemoveCompany = (indexToRemove: number) => {
+    const updated = companySections.filter((_, idx) => idx !== indexToRemove);
+    const newShowFields = [...showExtraFieldsFor];
+    newShowFields.splice(indexToRemove, 1);
+    setCompanySections(updated);
+    setShowExtraFieldsFor(newShowFields);
+  };
+
   const presetIndustries = [
     "Google",
     "Microsoft",
@@ -113,25 +138,24 @@ const AlumniInfoForm = () => {
     "Pathao",
   ];
 
+  async function fetchPresetSkills() {
+    try {
+      const response = await fetch(`${config.apiBaseUrl}/v1/skills/preset`);
+      const data = await response.json();
+      if (!response.ok) return
+      setPresetSkills(data);
+    } catch (error) {
+      console.error("Error fetching preset skills:", error);
+    }
+  }
+
   const toggleExtraFields = (index: number) => {
     const updated = [...showExtraFieldsFor];
     updated[index] = !updated[index];
     setShowExtraFieldsFor(updated);
   };
 
-  const addCompanySection = () => {
-    setCompanySections([
-      ...companySections,
-      {
-        currentIndustry: "",
-        skills: "",
-        position: "",
-        responsibilities: "",
-        platform: "",
-      },
-    ]);
-    setShowExtraFieldsFor([...showExtraFieldsFor, false]);
-  };
+  useEffect(() => { fetchPresetSkills() }, [])
 
   return (
     <div className="h-full flex items-center justify-center p-6">
@@ -196,214 +220,25 @@ const AlumniInfoForm = () => {
               required
             />
 
-            {/* Current Company Section (first company only) */}
-            {companySections.length > 0 && (
-              <div
-                key={0}
-                className="col-span-full bg-muted/10 border p-4 rounded-xl mb-6"
-              >
-                <h3 className="text-base font-semibold mb-2">Current Company</h3>
+            <FloatingInput
+              type="text"
+              disabled={pending}
+              placeholder="Skills (Comma separated)"
+              label="Skills"
+              value={form.skills}
+              onChange={(e) => setForm({ ...form, skills: e.target.value })}
+              required
+            />
 
-                <div>
-                  <label className="text-sm font-medium">Industry</label>
-                  <input
-                    list="industry-options"
-                    type="text"
-                    className="w-full p-3 border rounded-md mt-1 text-sm"
-                    placeholder="Type or select"
-                    disabled={pending}
-                    value={companySections[0].currentIndustry}
-                    onChange={(e) => {
-                      const updated = [...companySections];
-                      updated[0].currentIndustry = e.target.value;
-                      setCompanySections(updated);
-                    }}
-                    required
-                  />
-                  <datalist id="industry-options">
-                    {presetIndustries.map((company, idx) => (
-                      <option key={idx} value={company} />
-                    ))}
-                  </datalist>
-                </div>
+            <FloatingInput
+              type="url"
+              disabled={pending}
+              placeholder="Github Profile URL"
+              label="Github 👩🏻‍💻"
+              value={form.github}
+              onChange={(e) => setForm({ ...form, github: e.target.value })}
+            />
 
-                <div className="mt-3">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => toggleExtraFields(0)}
-                  >
-                    {showExtraFieldsFor[0] ? "Hide Company Info" : "Add Company Info"}
-                  </Button>
-                </div>
-
-                {showExtraFieldsFor[0] && (
-                  <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <FloatingInput
-                      type="text"
-                      disabled={pending}
-                      placeholder="Skills (separated by comma)"
-                      label="Skills"
-                      value={companySections[0].skills}
-                      onChange={(e) => {
-                        const updated = [...companySections];
-                        updated[0].skills = e.target.value;
-                        setCompanySections(updated);
-                      }}
-                    />
-
-                    <FloatingInput
-                      type="text"
-                      disabled={pending}
-                      placeholder="Position"
-                      label="Position"
-                      value={companySections[0].position}
-                      onChange={(e) => {
-                        const updated = [...companySections];
-                        updated[0].position = e.target.value;
-                        setCompanySections(updated);
-                      }}
-                    />
-
-                    <FloatingInput
-                      type="text"
-                      disabled={pending}
-                      placeholder="Key Responsibilities"
-                      label="Responsibilities"
-                      value={companySections[0].responsibilities}
-                      onChange={(e) => {
-                        const updated = [...companySections];
-                        updated[0].responsibilities = e.target.value;
-                        setCompanySections(updated);
-                      }}
-                    />
-
-                    <FloatingInput
-                      type="text"
-                      disabled={pending}
-                      placeholder="Platform"
-                      label="Platform"
-                      value={companySections[0].platform}
-                      onChange={(e) => {
-                        const updated = [...companySections];
-                        updated[0].platform = e.target.value;
-                        setCompanySections(updated);
-                      }}
-                    />
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* Previous Companies Section(s) */}
-            {companySections.slice(1).map((section, index) => (
-              <div
-                key={index + 1}
-                className="col-span-full bg-muted/10 border p-4 rounded-xl mb-6"
-              >
-                <h3 className="text-base font-semibold mb-2">{`Previous Company ${index + 1}`}</h3>
-
-                <div>
-                  <label className="text-sm font-medium">Industry</label>
-                  <input
-                    list="industry-options"
-                    type="text"
-                    className="w-full p-3 border rounded-md mt-1 text-sm"
-                    placeholder="Type or select"
-                    disabled={pending}
-                    value={section.currentIndustry}
-                    onChange={(e) => {
-                      const updated = [...companySections];
-                      updated[index + 1].currentIndustry = e.target.value;
-                      setCompanySections(updated);
-                    }}
-                    required
-                  />
-                  <datalist id="industry-options">
-                    {presetIndustries.map((company, idx) => (
-                      <option key={idx} value={company} />
-                    ))}
-                  </datalist>
-                </div>
-
-                <div className="mt-3">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => toggleExtraFields(index + 1)}
-                  >
-                    {showExtraFieldsFor[index + 1]
-                      ? "Hide Company Info"
-                      : "Add Company Info"}
-                  </Button>
-                </div>
-
-                {showExtraFieldsFor[index + 1] && (
-                  <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <FloatingInput
-                      type="text"
-                      disabled={pending}
-                      placeholder="Skills (separated by comma)"
-                      label="Skills"
-                      value={section.skills}
-                      onChange={(e) => {
-                        const updated = [...companySections];
-                        updated[index + 1].skills = e.target.value;
-                        setCompanySections(updated);
-                      }}
-                    />
-
-                    <FloatingInput
-                      type="text"
-                      disabled={pending}
-                      placeholder="Position"
-                      label="Position"
-                      value={section.position}
-                      onChange={(e) => {
-                        const updated = [...companySections];
-                        updated[index + 1].position = e.target.value;
-                        setCompanySections(updated);
-                      }}
-                    />
-
-                    <FloatingInput
-                      type="text"
-                      disabled={pending}
-                      placeholder="Key Responsibilities"
-                      label="Responsibilities"
-                      value={section.responsibilities}
-                      onChange={(e) => {
-                        const updated = [...companySections];
-                        updated[index + 1].responsibilities = e.target.value;
-                        setCompanySections(updated);
-                      }}
-                    />
-
-                    <FloatingInput
-                      type="text"
-                      disabled={pending}
-                      placeholder="Platform"
-                      label="Platform"
-                      value={section.platform}
-                      onChange={(e) => {
-                        const updated = [...companySections];
-                        updated[index + 1].platform = e.target.value;
-                        setCompanySections(updated);
-                      }}
-                    />
-                  </div>
-                )}
-              </div>
-            ))}
-
-            {/* Add Previous Company button */}
-            <div className="col-span-full -mt-5">
-              <Button type="button" variant="outline" onClick={addCompanySection}>
-                Add Previous Company
-              </Button>
-            </div>
-
-            {/* LinkedIn, Facebook, Profile Photo below company sections */}
             <FloatingInput
               type="url"
               disabled={pending}
@@ -422,7 +257,31 @@ const AlumniInfoForm = () => {
               onChange={(e) => setForm({ ...form, facebook: e.target.value })}
             />
 
-            <FloatingFileInput label="Profile Photo" onChange={handleFileChange} />
+            {/* Profile Photo for alumni */}
+            <div className="col-span-full">
+              <FloatingFileInput label="Profile Photo" onChange={handleFileChange} />
+            </div>
+
+            {/* Company Sections */}
+            {
+              companySections.map((company, idx) => (
+                <CompanySection
+                  key={idx}
+                  index={idx}
+                  company={company}
+                  pending={pending}
+                  showExtraFields={showExtraFieldsFor[idx]}
+                  toggleExtraFields={() => toggleExtraFields(idx)}
+                  companySections={companySections}
+                  setCompanySections={setCompanySections}
+                  isCurrentCompany={idx === 0}
+                  presetIndustries={presetIndustries}
+                  onRemove={idx === 0 ? undefined : () => handleRemoveCompany(idx)}
+                  isLastCompany={idx === companySections.length - 1}
+                  handleAddCompany={handleAddCompany}
+                />
+              ))
+            }
 
             {/* Submit Button */}
             <Button
