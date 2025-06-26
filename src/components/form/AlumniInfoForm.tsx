@@ -30,7 +30,7 @@ const AlumniInfoForm = () => {
   const [companySections, setCompanySections] = useState([
     {
       currentIndustry: "",
-      software: "",
+      skills: "",
       position: "",
       responsibilities: "",
       platform: "",
@@ -124,7 +124,7 @@ const AlumniInfoForm = () => {
       ...companySections,
       {
         currentIndustry: "",
-        software: "",
+        skills: "",
         position: "",
         responsibilities: "",
         platform: "",
@@ -242,12 +242,12 @@ const AlumniInfoForm = () => {
                     <FloatingInput
                       type="text"
                       disabled={pending}
-                      placeholder="Software"
-                      label="Software"
-                      value={companySections[0].software}
+                      placeholder="Skills (separated by comma)"
+                      label="Skills"
+                      value={companySections[0].skills}
                       onChange={(e) => {
                         const updated = [...companySections];
-                        updated[0].software = e.target.value;
+                        updated[0].skills = e.target.value;
                         setCompanySections(updated);
                       }}
                     />
@@ -343,12 +343,12 @@ const AlumniInfoForm = () => {
                     <FloatingInput
                       type="text"
                       disabled={pending}
-                      placeholder="Software"
-                      label="Software"
-                      value={section.software}
+                      placeholder="Skills (separated by comma)"
+                      label="Skills"
+                      value={section.skills}
                       onChange={(e) => {
                         const updated = [...companySections];
-                        updated[index + 1].software = e.target.value;
+                        updated[index + 1].skills = e.target.value;
                         setCompanySections(updated);
                       }}
                     />
