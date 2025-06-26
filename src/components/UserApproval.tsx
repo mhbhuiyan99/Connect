@@ -21,7 +21,7 @@ type User = {
 
 
 
-export default function AdminApproval() {
+export default function UserApproval() {
   const [showFormApprovals, setShowFormApprovals] = useState(false);
   const [showUserApprovals, setShowUserApprovals] = useState(false);
   const [isLoading, setIsLoading] = useState(false);

@@ -1,4 +1,4 @@
-import AdminApproval from "@/components/AdminApproval";
+import AdminApproval from "@/components/UserApproval";
 
 export default function AdminApprovalPage() {
   return <AdminApproval />;

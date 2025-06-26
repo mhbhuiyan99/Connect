@@ -73,7 +73,7 @@ const Navbar = () => {
                 />*/}
             <span>Alumni Form</span>
           </Link>
-          <Link href="/events" className="flex items-center gap-2">
+          <Link href="/event" className="flex items-center gap-2">
             <span className="text-center">
               Events<br />Reunion
             </span>
@@ -86,8 +86,8 @@ const Navbar = () => {
           </Link>
           {
             user?.role == "admin" &&
-            <Link href="/admin_approval" className="flex items-center gap-2">
-              <span>Admin Approval</span> {/*re.. reg*/}
+            <Link href="/adminpanel" className="flex items-center gap-2">
+              <span>Admin Panel</span> {/*re.. reg*/}
             </Link>
           }
         </div>
