@@ -80,10 +80,17 @@ const AlumniInfoForm = () => {
           facebook: form.facebook,
           profile_photo: imageUrl,
           industries: companySections,
+          skills: form.skills,
         }),
       });
 
       const data = await res.json();
+      if (res.status === 422) {
+        data.detail.forEach(
+          (error: { msg: string, loc: string }) => toast.error(error.msg + "  " + error.loc.toString())
+        );
+        setError("Failed to submit alumni information, Wrong Data");
+      }
 
       if (res.ok) {
         toast.success("Alumni information submitted successfully!");
