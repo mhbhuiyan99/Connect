@@ -11,6 +11,7 @@ const FILTERS = {
   NAME: "name",
   SKILLS: "skills",
   COMPANY: "company",
+  STUDENT_ID: "student_id",
 };
 
 export default function AlumniViewPagePage() {
@@ -78,6 +79,7 @@ export default function AlumniViewPagePage() {
             <option value={FILTERS.NAME}>Name</option>
             <option value={FILTERS.SKILLS}>Skills</option>
             <option value={FILTERS.COMPANY}>Company</option>
+            <option value={FILTERS.STUDENT_ID}>Student ID</option>
           </select>
         </div>
       </div>
