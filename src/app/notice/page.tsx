@@ -5,6 +5,7 @@ import NoticeForm from '@/components/NoticeForm';
 import NoticeList from '@/components/NoticeList';
 import { useAuth } from '@/providers/AuthProvider';
 import { config } from '@/lib/config';
+import { useAuthStore } from '@/store/authStore';
 
 interface Notice {
   id: string;
@@ -16,7 +17,8 @@ interface Notice {
 }
 
 export default function NoticePage() {
-  const { session } = useAuth();
+  const { accessToken, user } = useAuthStore();
+
   const [page, setPage] = useState(1);
   const [notices, setNotices] = useState<Notice[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -29,7 +31,7 @@ export default function NoticePage() {
       didFetchRef.current = true;
       fetchNotices(page);
     }
-  }, [session]);
+  }, [user]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -48,7 +50,7 @@ export default function NoticePage() {
         observer.unobserve(loaderRef.current);
       }
     };
-  }, [loaderRef.current, page, session]);
+  }, [loaderRef.current, page, user]);
 
 
   const fetchNotices = async (pageNumber: number, limit: number = 10) => {
@@ -86,7 +88,7 @@ export default function NoticePage() {
           {hasMore && <div ref={loaderRef} className="h-10" />}
         </div>
 
-        {session && <div className="lg:col-span-1">
+        {user && <div className="lg:col-span-1">
           <NoticeForm onNewNotice={(n) => setNotices((prev) => [n, ...prev])} />
         </div>}
       </div>

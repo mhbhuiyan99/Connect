@@ -5,8 +5,12 @@ export interface Alumni {
     batch: number;
     name: string;
     email: string;
-    current_industry: string;
-    job_title: string;
+    industries: {
+        industry: string;
+        position: string;
+        responsibilities: string;
+        platform: string;
+    }[];
     skills: string[];
     linked_in: string;
     facebook: string;
@@ -17,6 +21,8 @@ export interface Alumni {
 
 
 export default function AlumniCard({ alumni }: { alumni: Alumni }) {
+    const current_industry = alumni.industries[0]?.industry || "";
+    const job_title = alumni.industries[0]?.position || "";
     return (
         <div className="border rounded-xl p-4 bg-white shadow hover:shadow-lg transition-all">
             <div className="flex flex-col items-center text-center">
@@ -27,8 +33,8 @@ export default function AlumniCard({ alumni }: { alumni: Alumni }) {
                 />
                 <h3 className="text-xl font-semibold">{alumni.name}</h3>
                 <p className="text-sm text-gray-500">{alumni.student_id}</p>
-                <p className="text-sm text-gray-600">{alumni.job_title}</p>
-                <p className="text-sm text-black font-medium mt-0.5">{alumni.current_industry}</p>
+                <p className="text-sm text-gray-600">{job_title}</p>
+                <p className="text-sm text-black font-medium mt-0.5">{current_industry}</p>
 
                 {alumni.skills.length > 0 && (
                     <p className="text-sm text-gray-700 mt-2">

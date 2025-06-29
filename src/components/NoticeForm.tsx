@@ -2,12 +2,13 @@
 
 import { config } from '@/lib/config';
 import { useAuth } from '@/providers/AuthProvider';
+import { useAuthStore } from '@/store/authStore';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
 
 export default function NoticeForm({ onNewNotice }: { onNewNotice: (notice: any) => void }) {
-  const { session } = useAuth();
+  const { accessToken } = useAuthStore();
 
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
@@ -16,7 +17,7 @@ export default function NoticeForm({ onNewNotice }: { onNewNotice: (notice: any)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!session) return;
+    if (!accessToken) return;
     setIsSubmitting(true);
 
     try {
@@ -42,7 +43,7 @@ export default function NoticeForm({ onNewNotice }: { onNewNotice: (notice: any)
         }),
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${session.accessToken}`
+          'Authorization': `Bearer ${accessToken}`
         }
       });
 

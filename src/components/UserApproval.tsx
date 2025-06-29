@@ -2,7 +2,7 @@
 
 import { config } from "@/lib/config";
 import Alumni from "@/models/Alumni";
-import { useAuth } from "@/providers/AuthProvider";
+import { useAuthStore } from "@/store/authStore";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -25,7 +25,7 @@ export default function UserApproval() {
   const [showFormApprovals, setShowFormApprovals] = useState(false);
   const [showUserApprovals, setShowUserApprovals] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const { session, loading } = useAuth();
+  const { accessToken, authLoading } = useAuthStore();
 
   const [alumnis, setAlumnis] = useState<Alumni[]>([]);
   const [users, setUsers] = useState<User[]>([]);
@@ -34,7 +34,7 @@ export default function UserApproval() {
     setIsLoading(true);
     try {
       const res = await fetch(`${config.apiBaseUrl}/v1/auth/approve/alumni/pending?page=${pageNumber}&limit=${limit}`,
-        { headers: { Authorization: `Bearer ${session?.accessToken}` } }
+        { headers: { Authorization: `Bearer ${accessToken}` } }
       );
       const data = await res.json();
       setAlumnis(data);
@@ -44,11 +44,12 @@ export default function UserApproval() {
       setIsLoading(false);
     }
   };
+
   const getUsers = async (pageNumber: number, limit: number = 10) => {
     setIsLoading(true);
     try {
       const res = await fetch(`${config.apiBaseUrl}/v1/auth/approve/user/pending?page=${pageNumber}&limit=${limit}`,
-        { headers: { Authorization: `Bearer ${session?.accessToken}` } }
+        { headers: { Authorization: `Bearer ${accessToken}` } }
       );
       const data = await res.json();
       setUsers(data);
@@ -58,20 +59,21 @@ export default function UserApproval() {
       setIsLoading(false);
     }
   };
+
   useEffect(() => {
-    if (!session || loading) return;
-    if (!loading && session && !isLoading) {
+    if (!accessToken) return;
+    if (accessToken && !isLoading) {
       getAlumnis(1);
       getUsers(1);
     }
-  }, [session, loading]);
+  }, [accessToken]);
 
 
   async function handleAlumniApprove(alumniId: string, status: boolean) {
     try {
       const res = await fetch(`${config.apiBaseUrl}/v1/auth/approve/alumni`, {
         method: "POST",
-        headers: { Authorization: `Bearer ${session?.accessToken}`, "Content-Type": "application/json" },
+        headers: { Authorization: `Bearer ${accessToken}`, "Content-Type": "application/json" },
         body: JSON.stringify({
           "user_id": alumniId,
           "status": status,
@@ -91,7 +93,7 @@ export default function UserApproval() {
     try {
       const res = await fetch(`${config.apiBaseUrl}/v1/auth/approve/user`, {
         method: "POST",
-        headers: { Authorization: `Bearer ${session?.accessToken}`, "Content-Type": "application/json" },
+        headers: { Authorization: `Bearer ${accessToken}`, "Content-Type": "application/json" },
         body: JSON.stringify({
           "user_id": alumniId,
           "status": status,
@@ -125,8 +127,8 @@ export default function UserApproval() {
             <p className="text-gray-600">Batch: {user.batch}</p>
             <p className="text-gray-600">Email: {user.email}</p>
             <p className="text-gray-600">Role: {user.role}</p>
-            <p className="text-gray-600">Current Industry: {user.current_industry}</p>
-            <p className="text-gray-600">Job Title: {user.job_title}</p>
+            <p className="text-gray-600">Current Industry: {user.industries[0]?.industry || ""}</p>
+            <p className="text-gray-600">Job Title: {user.industries[0]?.position || ""}</p>
             {user.linked_in && <p className="text-gray-600">Linked In: {user.linked_in}</p>}
             {user.facebook && <p className="text-gray-600">Facebook: {user.facebook}</p>}
             <p className="text-gray-600">Skills: {user.skills.join(", ")}</p>

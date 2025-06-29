@@ -4,19 +4,13 @@ import Link from "next/link";
 import MobileMenu from "./MobileMenu";
 import Image from 'next/image';
 import { buttonVariants } from './ui/button'
-import UserButton from "./user-button";
+import UserButton from "./UserButton";
 import { useAuth } from "@/providers/AuthProvider";
 import { useEffect, useState } from "react";
+import { useAuthStore } from "@/store/authStore";
 
 const Navbar = () => {
-  const [user, setUser] = useState<any>(null);
-
-  useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-  }, []);
+  const user = useAuthStore((s) => s.user);
 
   return (
     <div className="h-24 flex items-center justify-between">
@@ -74,22 +68,11 @@ const Navbar = () => {
             <span>Alumni Form</span>
           </Link>
           <Link href="/event" className="flex items-center gap-2">
-            <span className="text-center">
-              Events<br />Reunion
-            </span>
+            <span className="text-center">Events</span>
           </Link>
-          {/*<Link href="/" className="flex items-center gap-2">
-            <span>Reunion</span> 
-          </Link>*/}
-          <Link href="/userprofile" className="flex items-center gap-2">
-            <span>User Profile</span> {/*re.. reg*/}
+          <Link href="/" className="flex items-center gap-2">
+            <span>Reunion</span>
           </Link>
-          {
-            user?.role == "admin" &&
-            <Link href="/adminpanel" className="flex items-center gap-2">
-              <span>Admin Panel</span> {/*re.. reg*/}
-            </Link>
-          }
         </div>
       </div>
 

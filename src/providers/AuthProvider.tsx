@@ -10,12 +10,12 @@ interface Session {
 const AuthContext = createContext<{
     session: Session | null;
     setSession: (session: Session | null) => void;
-    loading: boolean;
+    isAuthLoading: boolean;
     user: any
 }>({
     session: null,
     setSession: () => { },
-    loading: true,
+    isAuthLoading: true,
     user: null
 });
 
@@ -84,7 +84,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }, [session]);
 
     return (
-        <AuthContext.Provider value={{ session, setSession, loading, user: null }}>
+        <AuthContext.Provider value={{ session, setSession, isAuthLoading: loading, user }}>
             {children}
         </AuthContext.Provider>
     );

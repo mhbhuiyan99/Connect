@@ -4,8 +4,12 @@ interface Alumni {
   batch: number;
   name: string;
   email: string;
-  current_industry: string;
-  job_title: string;
+  industries: {
+    industry: string;
+    position: string;
+    responsibilities: string;
+    platform: string;
+  }[];
   skills: string[];
   linked_in: string | null;
   facebook: string | null;

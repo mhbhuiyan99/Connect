@@ -20,11 +20,11 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { TriangleAlert } from "lucide-react";
-import { useAuth } from "@/providers/AuthProvider";
 import { config } from "@/lib/config";
+import { useAuthStore } from "@/store/authStore";
 
 const SignInForm = () => {
-  const { setSession } = useAuth()
+  const { setRefreshToken, fetchUser, autoRefresh, setAccessToken, setUser } = useAuthStore()
 
   const [email, setEmail] = useState<string>("")
   const [password, setPassword] = useState<string>("")
@@ -55,13 +55,10 @@ const SignInForm = () => {
       setError(data.detail);
       setPending(false)
     } else {
-      localStorage.setItem("user", JSON.stringify(data.user));
-      localStorage.setItem("access_token", data.access_token);
-      localStorage.setItem("refresh_token", data.refresh_token);
-      setSession({
-        accessToken: data.access_token,
-        expiresAt: Date.now() + 30 * 60 * 1000
-      })
+      await setRefreshToken(data.refresh_token);
+      await setAccessToken(data.access_token);
+      await autoRefresh();
+      await fetchUser();
       router.push("/");
       toast.success("login successful")
       setPending(false)

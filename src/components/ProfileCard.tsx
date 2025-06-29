@@ -12,14 +12,14 @@ type Company = {
 
 type AlumniProfileProps = {
   student_id: string;
-  batch: string;
+  batch: number;
   name: string;
   email: string;
   linked_in?: string;
   facebook?: string;
   github?: string;
   skills?: string[];
-  profile_photo?: string;
+  profile_photo: string | null;
   industries: Company[];
 };
 

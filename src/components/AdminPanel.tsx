@@ -5,7 +5,7 @@ import UserApproval from "./UserApproval"; // <- Reused for User Approval
 
 const menuItems = [
   { id: "userapproval", label: "User Approval" },
-  { id: "noticeedit", label: "Notice Edit" },
+  { id: "noticeedit", label: "Notice" },
   { id: "formedit", label: "Form Edit" },
   { id: "adminapproval", label: "Admin Approval" },
 ];
@@ -38,9 +38,8 @@ export default function AdminPanel() {
             <li key={item.id}>
               <button
                 onClick={() => setActiveTab(item.id)}
-                className={`w-full text-left px-4 py-2 rounded-md hover:bg-gray-200 transition ${
-                  activeTab === item.id ? "bg-gray-300 font-semibold" : ""
-                }`}
+                className={`w-full text-left px-4 py-2 rounded-md hover:bg-gray-200 transition ${activeTab === item.id ? "bg-gray-300 font-semibold" : ""
+                  }`}
               >
                 {item.label}
               </button>
