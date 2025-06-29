@@ -18,6 +18,7 @@ const links = [
     { href: "/admin/events", label: "Events" },
     { href: "/admin/users", label: "Users" },
     { href: "/admin/approval", label: "Approval" },
+    
 ];
 
 export default function Sidebar() {
