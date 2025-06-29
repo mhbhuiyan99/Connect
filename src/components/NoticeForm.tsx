@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { toast } from 'sonner';
 
 
-export default function NoticeForm({ onNewNotice }: { onNewNotice: (notice: any) => void }) {
+export default function NoticeForm() {
   const { accessToken } = useAuthStore();
 
   const [title, setTitle] = useState('');
@@ -48,8 +48,7 @@ export default function NoticeForm({ onNewNotice }: { onNewNotice: (notice: any)
       });
 
       if (response.ok) {
-        const newNotice = await response.json();
-        onNewNotice(newNotice);
+        await response.json();
         setTitle('');
         setContent('');
         setImage(null);

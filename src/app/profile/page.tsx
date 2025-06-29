@@ -32,13 +32,13 @@ export default function ProfilePage() {
 
     useEffect(() => {
         async function getUserById(id: string) {
-            if (!id) return null;
+            if (!id) throw new Error("User ID is required");
 
             const res = await fetch(`${config.apiBaseUrl}/v1/alumni/student/${id}`, {
                 cache: "no-store",
             });
 
-            if (!res.ok) return null;
+            if (!res.ok) throw new Error("Failed to fetch alumni data");
             return res.json();
         }
 

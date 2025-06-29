@@ -1,9 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import NoticeForm from '@/components/NoticeForm';
 import NoticeList from '@/components/NoticeList';
-import { useAuth } from '@/providers/AuthProvider';
 import { config } from '@/lib/config';
 import { useAuthStore } from '@/store/authStore';
 
@@ -87,10 +85,6 @@ export default function NoticePage() {
           <NoticeList notices={notices} />
           {hasMore && <div ref={loaderRef} className="h-10" />}
         </div>
-
-        {user && <div className="lg:col-span-1">
-          <NoticeForm onNewNotice={(n) => setNotices((prev) => [n, ...prev])} />
-        </div>}
       </div>
     </div>
   );
