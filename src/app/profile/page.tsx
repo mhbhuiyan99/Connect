@@ -6,10 +6,28 @@ import { useAuthStore } from "@/store/authStore";
 import { config } from "@/lib/config";
 import { useEffect, useState } from "react";
 import { User } from "@/store/authStore"
+import Alumni from "@/models/Alumni";
 
 export default function ProfilePage() {
     const user = useAuthStore((state) => state.user);
-    const [alumni, setAlumni] = useState<User | null>(null);
+    const [alumni, setAlumni] = useState<Alumni>(
+        {
+            student_id: "",
+            batch: 1,
+            name: "",
+            email: "",
+            linked_in: "",
+            facebook: "",
+            github: "",
+            profile_photo: "/default-avatar.png",
+            skills: [],
+            industries: [],
+            role: "alumni",
+            sorting_order: 0,
+            approved: true,
+            id: ""
+        }
+    );
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
@@ -33,7 +51,7 @@ export default function ProfilePage() {
         return notFound();
     }
 
-    if (!alumni || isLoading) {
+    if (isLoading) {
         return (
             <div className="p-6 max-w-4xl mx-auto">
                 <h1 className="text-2xl font-bold mb-6">Alumni Profile</h1>

@@ -15,10 +15,10 @@ type AlumniProfileProps = {
   batch: number;
   name: string;
   email: string;
-  linked_in?: string;
-  facebook?: string;
-  github?: string;
-  skills?: string[];
+  linked_in: string | null;
+  facebook: string | null;
+  github: string | null;
+  skills: string[];
   profile_photo: string | null;
   industries: Company[];
 };
