@@ -67,7 +67,7 @@ const Navbar = () => {
                 />*/}
             <span>Alumni Form</span>
           </Link>
-          <Link href="/event" className="flex items-center gap-2">
+          <Link href="/events" className="flex items-center gap-2">
             <span className="text-center">Events</span>
           </Link>
           <Link href="/" className="flex items-center gap-2">
