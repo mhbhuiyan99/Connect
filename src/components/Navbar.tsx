@@ -54,7 +54,7 @@ const Navbar = () => {
               height={25}
               className="w-4 h-4"
             />*/}
-            <span> Member Info </span>
+            <span> Alumni Info </span>
           </Link>
 
           <Link href="/alumni/form" className="flex items-center gap-2">
