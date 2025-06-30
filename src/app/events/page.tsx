@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import EventList from "@/components/EventList";
-
+import { config } from "@/lib/config";
 export default function EventsPage() {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -11,7 +11,7 @@ export default function EventsPage() {
 useEffect(() => {
   async function fetchEvents() {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/v1/events`);
+      const res = await fetch(`${config.apiBaseUrl}/v1/events`);
       if (!res.ok) {
         throw new Error(`HTTP error! status: ${res.status}`);
       }
