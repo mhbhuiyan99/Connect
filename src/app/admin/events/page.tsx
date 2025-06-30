@@ -6,6 +6,9 @@ import { Button } from "@/components/ui/button";
 import { FloatingInput } from "@/components/ui/floating-input";
 import { FloatingFileInput } from "@/components/ui/floating-input-file";
 
+// Optional: add this if you're using environment variables
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
+
 export default function AdminEventsPage() {
   const [formData, setFormData] = useState({
     title: "",
@@ -15,6 +18,7 @@ export default function AdminEventsPage() {
   });
 
   const [image, setImage] = useState<File | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -22,21 +26,63 @@ export default function AdminEventsPage() {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
 
-    console.log("Event Data:", formData);
-    console.log("Selected Image:", image);
-    alert("Event submitted! Check console for values.");
+    try {
+      let photoUrl = "";
 
-    // Reset form
-    setFormData({
-      title: "",
-      date: "",
-      location: "",
-      description: "",
-    });
-    setImage(null);
+      // Step 1: Upload image to image API
+      if (image) {
+        const formDataImage = new FormData();
+        formDataImage.append("file", image);
+
+        const uploadRes = await fetch(`${API_BASE_URL}/v1/image/upload`, {
+          method: "POST",
+          body: formDataImage,
+        });
+
+        if (!uploadRes.ok) throw new Error("Image upload failed");
+
+        const uploadData = await uploadRes.json();
+        photoUrl = `${API_BASE_URL}${uploadData.image_url}`;
+      }
+
+      // Step 2: Submit event data to backend
+      const res = await fetch(`${API_BASE_URL}/v1/events/create`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...formData,
+          photo: photoUrl,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        console.error("Event creation error:", data);
+        alert(data.detail || "Event submission failed.");
+        return;
+      }
+
+      alert("✅ Event submitted successfully!");
+
+      // Reset form
+      setFormData({
+        title: "",
+        date: "",
+        location: "",
+        description: "",
+      });
+      setImage(null);
+    } catch (err) {
+      console.error("Submit error:", err);
+      alert("❌ Submission failed. Check console for details.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -84,8 +130,8 @@ export default function AdminEventsPage() {
 
           <FloatingFileInput label="Event Banner (Image)" onChange={handleFileChange} />
 
-          <Button type="submit" className="w-full mt-6" size="lg">
-            Submit Event
+          <Button type="submit" className="w-full mt-6" size="lg" disabled={loading}>
+            {loading ? "Submitting..." : "Submit Event"}
           </Button>
         </form>
       </div>

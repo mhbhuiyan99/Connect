@@ -4,7 +4,7 @@
 import { CalendarDays, MapPin } from "lucide-react";
 
 type Event = {
-  id: number;
+  _id: string;
   title: string;
   date: string;
   location: string;

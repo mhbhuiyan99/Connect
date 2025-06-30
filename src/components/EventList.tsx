@@ -1,10 +1,9 @@
-// components/EventList.tsx
 "use client";
 
-import EventCard from "./EventCard";
+import EventCard from "./EventCard";  // adjust path if needed
 
 type Event = {
-  id: number;
+  _id: string;
   title: string;
   date: string;
   location: string;
@@ -15,7 +14,7 @@ export default function EventList({ events }: { events: Event[] }) {
   return (
     <div className="space-y-6">
       {events.map((event) => (
-        <EventCard key={event.id} event={event} />
+        <EventCard key={event._id} event={event} />
       ))}
     </div>
   );
