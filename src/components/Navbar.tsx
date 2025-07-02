@@ -70,9 +70,10 @@ const Navbar = () => {
           <Link href="/events" className="flex items-center gap-2">
             <span className="text-center">Events</span>
           </Link>
-          <Link href="/" className="flex items-center gap-2">
+          {/*<Link href="/" className="flex items-center gap-2">
             <span>Reunion</span>
           </Link>
+          */}
         </div>
       </div>
 

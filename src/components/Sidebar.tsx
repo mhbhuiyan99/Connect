@@ -15,7 +15,14 @@ const links = [
             { href: "/admin/notice", label: "Notice List" },
         ],
     },
-    { href: "/admin/events", label: "Events" },
+    {
+        label: "Events",
+        children: [
+            { href: "/admin/events_all/event_form", label: "Event_form" },
+            { href: "/admin/events_all/event_edit", label: "Event_edit" },
+        ],
+    },
+    
     { href: "/admin/users", label: "Users" },
     { href: "/admin/approval", label: "Approval" },
     
