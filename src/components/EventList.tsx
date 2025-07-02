@@ -8,6 +8,7 @@ type Event = {
   date: string;
   location: string;
   description: string;
+  photo?: string;
 };
 
 export default function EventList({ events }: { events: Event[] }) {
