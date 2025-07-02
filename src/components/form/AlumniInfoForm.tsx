@@ -139,7 +139,6 @@ const AlumniInfoForm = () => {
     "Meta",
     "Amazon",
     "Tesla",
-    "Robi Axiata",
     "Banglalink",
     "bKash",
     "Pathao",

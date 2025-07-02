@@ -12,7 +12,7 @@ const links = [
         label: "Notice",
         children: [
             { href: "/admin/notice/create", label: "Create Notice" },
-            { href: "/admin/notice", label: "Notice List" },
+            { href: "/admin/notice/edit", label: "Notice List" },
         ],
     },
     {
