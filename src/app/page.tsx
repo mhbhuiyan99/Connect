@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import AboutSection from '@/components/AboutSection';
-import HeroSection from '@/components/HeroSection';
-import NoticeBoard from '@/components/NoticeBoard';
+import AboutSection from "@/components/about/AboutSection";
+import HeroSection from "@/components/HeroSection";
+import NoticeBoard from "@/components/NoticeBoard";
 
 export default function Home() {
   return (

@@ -1,15 +1,15 @@
 "use client";
 
-import AdminLayout from "@/components/AdminLayout";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { FloatingInput } from "@/components/ui/floating-input";
 import { FloatingFileInput } from "@/components/ui/floating-input-file";
-
-// Optional: add this if you're using environment variables
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
+import { config } from "@/lib/config";
+import { useAuthStore } from "@/store/authStore";
 
 export default function AdminEventsPage() {
+  const { accessToken } = useAuthStore();
+
   const [formData, setFormData] = useState({
     title: "",
     date: "",
@@ -33,12 +33,11 @@ export default function AdminEventsPage() {
     try {
       let photoUrl = "";
 
-      // Step 1: Upload image to image API
       if (image) {
         const formDataImage = new FormData();
         formDataImage.append("file", image);
 
-        const uploadRes = await fetch(`${API_BASE_URL}/v1/image/upload`, {
+        const uploadRes = await fetch(`${config.apiBaseUrl}/v1/image/upload`, {
           method: "POST",
           body: formDataImage,
         });
@@ -46,13 +45,12 @@ export default function AdminEventsPage() {
         if (!uploadRes.ok) throw new Error("Image upload failed");
 
         const uploadData = await uploadRes.json();
-        photoUrl = `${API_BASE_URL}${uploadData.image_url}`;
+        photoUrl = `${config.apiBaseUrl}${uploadData.image_url}`;
       }
 
-      // Step 2: Submit event data to backend
-      const res = await fetch(`${API_BASE_URL}/v1/events/create`, {
+      const res = await fetch(`${config.apiBaseUrl}/v1/events/create`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${accessToken}` },
         body: JSON.stringify({
           ...formData,
           photo: photoUrl,
@@ -86,12 +84,11 @@ export default function AdminEventsPage() {
   };
 
   return (
-    <AdminLayout>
+    <>
       <div className="p-6">
         <form
           onSubmit={handleSubmit}
-          className="w-full max-w-3xl bg-white rounded-xl shadow-md p-6 space-y-6"
-        >
+          className="w-full max-w-3xl bg-white rounded-xl shadow-md p-6 space-y-6">
           <h1 className="text-2xl font-bold text-center">Add New Event</h1>
 
           <FloatingInput
@@ -128,13 +125,20 @@ export default function AdminEventsPage() {
             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
           />
 
-          <FloatingFileInput label="Event Banner (Image)" onChange={handleFileChange} />
+          <FloatingFileInput
+            label="Event Banner (Image)"
+            onChange={handleFileChange}
+          />
 
-          <Button type="submit" className="w-full mt-6" size="lg" disabled={loading}>
+          <Button
+            type="submit"
+            className="w-full mt-6"
+            size="lg"
+            disabled={loading}>
             {loading ? "Submitting..." : "Submit Event"}
           </Button>
         </form>
       </div>
-    </AdminLayout>
+    </>
   );
 }

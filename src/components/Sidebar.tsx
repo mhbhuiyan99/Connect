@@ -18,14 +18,14 @@ const links = [
     {
         label: "Events",
         children: [
-            { href: "/admin/events_all/event_form", label: "Event_form" },
-            { href: "/admin/events_all/event_edit", label: "Event_edit" },
+            { href: "/admin/events/create", label: "New Event" },
+            { href: "/admin/events/edit", label: "Update Event" },
         ],
     },
-    
+
     { href: "/admin/users", label: "Users" },
     { href: "/admin/approval", label: "Approval" },
-    
+
 ];
 
 export default function Sidebar() {

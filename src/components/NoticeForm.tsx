@@ -1,17 +1,15 @@
-'use client';
+"use client";
 
-import { config } from '@/lib/config';
-import { useAuth } from '@/providers/AuthProvider';
-import { useAuthStore } from '@/store/authStore';
-import { useState } from 'react';
-import { toast } from 'sonner';
-
+import { config } from "@/lib/config";
+import { useAuthStore } from "@/store/authStore";
+import { useState } from "react";
+import { toast } from "sonner";
 
 export default function NoticeForm() {
   const { accessToken } = useAuthStore();
 
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
   const [image, setImage] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -21,7 +19,7 @@ export default function NoticeForm() {
     setIsSubmitting(true);
 
     try {
-      var imageUrl = "";
+      let imageUrl = "";
       if (image) {
         const formData = new FormData();
         formData.append("file", image);
@@ -29,33 +27,33 @@ export default function NoticeForm() {
         const uploadedImage = await fetch(`${config.apiBaseUrl}/v1/image/upload`, {
           method: "POST",
           body: formData,
-        })
+        });
         const imgData = await uploadedImage.json();
-        imageUrl = `${config.apiBaseUrl}${imgData.image_url}`
+        imageUrl = `${config.apiBaseUrl}${imgData.image_url}`;
       }
 
       const response = await fetch(`${config.apiBaseUrl}/v1/notice/`, {
-        method: 'POST',
+        method: "POST",
         body: JSON.stringify({
           title: title,
           content: content,
-          image_url: imageUrl
+          image_url: imageUrl,
         }),
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${accessToken}`
-        }
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
       });
 
       if (response.ok) {
         await response.json();
-        setTitle('');
-        setContent('');
+        setTitle("");
+        setContent("");
         setImage(null);
       }
     } catch (error) {
-      console.error('Error creating notice:', error);
-      toast.error('Failed to create notice');
+      console.error("Error creating notice:", error);
+      toast.error("Failed to create notice");
     } finally {
       setIsSubmitting(false);
     }
@@ -66,7 +64,9 @@ export default function NoticeForm() {
       <h2 className="text-xl font-semibold mb-4">Post a Notice</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
-          <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">
+          <label
+            htmlFor="title"
+            className="block text-sm font-medium text-gray-700 mb-1">
             Title
           </label>
           <input
@@ -80,7 +80,9 @@ export default function NoticeForm() {
         </div>
 
         <div className="mb-4">
-          <label htmlFor="content" className="block text-sm font-medium text-gray-700 mb-1">
+          <label
+            htmlFor="content"
+            className="block text-sm font-medium text-gray-700 mb-1">
             Content
           </label>
           <textarea
@@ -94,7 +96,9 @@ export default function NoticeForm() {
         </div>
 
         <div className="mb-4">
-          <label htmlFor="image" className="block text-sm font-medium text-gray-700 mb-1">
+          <label
+            htmlFor="image"
+            className="block text-sm font-medium text-gray-700 mb-1">
             Image (Optional)
           </label>
           <input
@@ -109,9 +113,8 @@ export default function NoticeForm() {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          {isSubmitting ? 'Posting...' : 'Post Notice'}
+          className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed">
+          {isSubmitting ? "Posting..." : "Post Notice"}
         </button>
       </form>
     </div>

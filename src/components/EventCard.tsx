@@ -4,7 +4,7 @@
 import { CalendarDays, MapPin } from "lucide-react";
 
 type Event = {
-  _id: string;
+  id: string;
   title: string;
   date: string;
   location: string;
@@ -27,7 +27,11 @@ export default function EventCard({ event }: { event: Event }) {
 
       <div className="flex items-center text-sm text-gray-600">
         <CalendarDays className="h-4 w-4 mr-2" />
-        {new Date(event.date).toLocaleDateString()}
+        {new Date(event.date).toLocaleDateString("en-US", {
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        })}
       </div>
 
       <div className="flex items-center text-sm text-gray-600">

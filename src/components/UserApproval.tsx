@@ -19,13 +19,11 @@ type User = {
   profile_photo: string;
 };
 
-
-
 export default function UserApproval() {
   const [showFormApprovals, setShowFormApprovals] = useState(false);
   const [showUserApprovals, setShowUserApprovals] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const { accessToken, authLoading } = useAuthStore();
+  const { accessToken } = useAuthStore();
 
   const [alumnis, setAlumnis] = useState<Alumni[]>([]);
   const [users, setUsers] = useState<User[]>([]);
@@ -33,9 +31,9 @@ export default function UserApproval() {
   const getAlumnis = async (pageNumber: number, limit: number = 10) => {
     setIsLoading(true);
     try {
-      const res = await fetch(`${config.apiBaseUrl}/v1/auth/approve/alumni/pending?page=${pageNumber}&limit=${limit}`,
-        { headers: { Authorization: `Bearer ${accessToken}` } }
-      );
+      const res = await fetch(`${config.apiBaseUrl}/v1/auth/approve/alumni/pending?page=${pageNumber}&limit=${limit}`, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
       const data = await res.json();
       setAlumnis(data);
     } catch (err) {
@@ -48,9 +46,9 @@ export default function UserApproval() {
   const getUsers = async (pageNumber: number, limit: number = 10) => {
     setIsLoading(true);
     try {
-      const res = await fetch(`${config.apiBaseUrl}/v1/auth/approve/user/pending?page=${pageNumber}&limit=${limit}`,
-        { headers: { Authorization: `Bearer ${accessToken}` } }
-      );
+      const res = await fetch(`${config.apiBaseUrl}/v1/auth/approve/user/pending?page=${pageNumber}&limit=${limit}`, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
       const data = await res.json();
       setUsers(data);
     } catch (err) {
@@ -68,15 +66,14 @@ export default function UserApproval() {
     }
   }, [accessToken]);
 
-
   async function handleAlumniApprove(alumniId: string, status: boolean) {
     try {
       const res = await fetch(`${config.apiBaseUrl}/v1/auth/approve/alumni`, {
         method: "POST",
         headers: { Authorization: `Bearer ${accessToken}`, "Content-Type": "application/json" },
         body: JSON.stringify({
-          "user_id": alumniId,
-          "status": status,
+          user_id: alumniId,
+          status: status,
         }),
       });
       if (res.ok) {
@@ -95,8 +92,8 @@ export default function UserApproval() {
         method: "POST",
         headers: { Authorization: `Bearer ${accessToken}`, "Content-Type": "application/json" },
         body: JSON.stringify({
-          "user_id": alumniId,
-          "status": status,
+          user_id: alumniId,
+          status: status,
         }),
       });
       if (res.ok) {
@@ -114,8 +111,7 @@ export default function UserApproval() {
       {users.map((user) => (
         <div
           key={user.id}
-          className="flex items-center border rounded-lg p-4 shadow-md"
-        >
+          className="flex items-center border rounded-lg p-4 shadow-md">
           <img
             src={user.profile_photo || "/default-avatar.png"}
             alt={user.name}
@@ -136,14 +132,12 @@ export default function UserApproval() {
           <div className="flex flex-col gap-2 ml-6">
             <button
               className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
-              onClick={() => handleAlumniApprove(user.id, true)}
-            >
+              onClick={() => handleAlumniApprove(user.id, true)}>
               Approve
             </button>
             <button
               className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition"
-              onClick={() => handleAlumniApprove(user.id, false)}
-            >
+              onClick={() => handleAlumniApprove(user.id, false)}>
               Deny
             </button>
           </div>
@@ -157,8 +151,7 @@ export default function UserApproval() {
       {users.map((user) => (
         <div
           key={user.id}
-          className="flex items-center border rounded-lg p-4 shadow-md"
-        >
+          className="flex items-center border rounded-lg p-4 shadow-md">
           <div className="flex-1 ml-6">
             <p className="text-xl font-semibold">{user.name}</p>
             <p className="text-gray-600">Student ID: {user.student_id}</p>
@@ -170,14 +163,12 @@ export default function UserApproval() {
           <div className="flex flex-col gap-2 ml-6">
             <button
               className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
-              onClick={() => handleApprove(user.id, true)}
-            >
+              onClick={() => handleApprove(user.id, true)}>
               Approve
             </button>
             <button
               className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition"
-              onClick={() => handleApprove(user.id, false)}
-            >
+              onClick={() => handleApprove(user.id, false)}>
               Deny
             </button>
           </div>
@@ -185,7 +176,6 @@ export default function UserApproval() {
       ))}
     </div>
   );
-
 
   return (
     <div className="max-w-4xl mx-auto p-6">
@@ -195,8 +185,7 @@ export default function UserApproval() {
       <div className="mb-6">
         <button
           onClick={() => setShowFormApprovals(!showFormApprovals)}
-          className="w-full flex justify-between items-center bg-gray-200 px-4 py-3 rounded text-lg font-semibold hover:bg-gray-300 transition"
-        >
+          className="w-full flex justify-between items-center bg-gray-200 px-4 py-3 rounded text-lg font-semibold hover:bg-gray-300 transition">
           <span>Alumni Form Approvals</span>
           <span>{showFormApprovals ? "▲" : "▼"}</span>
         </button>
@@ -207,8 +196,7 @@ export default function UserApproval() {
       <div>
         <button
           onClick={() => setShowUserApprovals(!showUserApprovals)}
-          className="w-full flex justify-between items-center bg-gray-200 px-4 py-3 rounded text-lg font-semibold hover:bg-gray-300 transition"
-        >
+          className="w-full flex justify-between items-center bg-gray-200 px-4 py-3 rounded text-lg font-semibold hover:bg-gray-300 transition">
           <span>Alumni User Approvals</span>
           <span>{showUserApprovals ? "▲" : "▼"}</span>
         </button>

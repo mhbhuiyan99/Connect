@@ -1,21 +1,13 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useRef } from 'react';
-import NoticeList from '@/components/NoticeList';
-import { config } from '@/lib/config';
-import { useAuthStore } from '@/store/authStore';
-
-interface Notice {
-  id: string;
-  title: string;
-  content: string;
-  imageUrl?: string;
-  createdAt: string;
-  // Add other properties as needed
-}
+import { useState, useEffect, useRef } from "react";
+import NoticeList from "@/components/NoticeList";
+import { config } from "@/lib/config";
+import { useAuthStore } from "@/store/authStore";
+import Notice from "@/models/Notice";
 
 export default function NoticePage() {
-  const { accessToken, user } = useAuthStore();
+  const { user } = useAuthStore();
 
   const [page, setPage] = useState(1);
   const [notices, setNotices] = useState<Notice[]>([]);
@@ -34,7 +26,9 @@ export default function NoticePage() {
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting && !isLoading && hasMore) { fetchNotices(page) }
+        if (entries[0].isIntersecting && !isLoading && hasMore) {
+          fetchNotices(page);
+        }
       },
       { threshold: 1.0 }
     );
@@ -49,7 +43,6 @@ export default function NoticePage() {
       }
     };
   }, [loaderRef.current, page, user]);
-
 
   const fetchNotices = async (pageNumber: number, limit: number = 10) => {
     if (!hasMore) return;
@@ -83,7 +76,12 @@ export default function NoticePage() {
             </div>
           )}
           <NoticeList notices={notices} />
-          {hasMore && <div ref={loaderRef} className="h-10" />}
+          {hasMore && (
+            <div
+              className="h-10"
+              ref={loaderRef}
+            />
+          )}
         </div>
       </div>
     </div>

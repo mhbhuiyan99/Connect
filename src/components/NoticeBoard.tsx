@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { useEffect, useState } from 'react';
-import { config } from '@/lib/config';
-import Notice from '@/models/Notice';
-import NoticeRotator from './NoticeRotator';
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { config } from "@/lib/config";
+import Notice from "@/models/Notice";
+import NoticeRotator from "./NoticeRotator";
 
 export default function NoticeBoard() {
   const [isLoading, setIsLoading] = useState(true);
@@ -26,7 +26,9 @@ export default function NoticeBoard() {
       setIsLoading(false);
     }
   };
-  useEffect(() => { fetchNotices(1) }, []);
+  useEffect(() => {
+    fetchNotices(1);
+  }, []);
 
   if (isLoading) {
     return (
@@ -40,11 +42,13 @@ export default function NoticeBoard() {
   return (
     <div className="bg-white rounded-lg shadow p-4">
       <h2 className="text-xl font-bold mb-3 border-b pb-2">Notice Board</h2>
-      <NoticeRotator notices={notices} createdAtDate={(dateStr) => new Date(dateStr).toLocaleString()} />
+      <NoticeRotator
+        notices={notices}
+        createdAtDate={(dateStr) => new Date(dateStr).toLocaleString()}
+      />
       <Link
         href="/notice"
-        className="block text-right text-blue-500 text-sm mt-3 hover:underline"
-      >
+        className="block text-right text-blue-500 text-sm mt-3 hover:underline">
         View all notices →
       </Link>
     </div>

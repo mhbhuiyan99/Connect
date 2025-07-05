@@ -38,9 +38,9 @@ export default function AdminPanel() {
             <li key={item.id}>
               <button
                 onClick={() => setActiveTab(item.id)}
-                className={`w-full text-left px-4 py-2 rounded-md hover:bg-gray-200 transition ${activeTab === item.id ? "bg-gray-300 font-semibold" : ""
-                  }`}
-              >
+                className={`w-full text-left px-4 py-2 rounded-md hover:bg-gray-200 transition ${
+                  activeTab === item.id ? "bg-gray-300 font-semibold" : ""
+                }`}>
                 {item.label}
               </button>
             </li>

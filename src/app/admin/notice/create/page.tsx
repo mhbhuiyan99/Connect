@@ -1,10 +1,5 @@
-import AdminLayout from "@/components/AdminLayout";
-import NoticeForm from "@/components/NoticeForm";
+import NoticeForm from "@/components/admin/NoticeForm";
 
 export default function NoticeCreatePage() {
-    return (
-        <AdminLayout>
-            <NoticeForm />
-        </AdminLayout>
-    );
+  return <NoticeForm />;
 }

@@ -1,113 +1,70 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { TriangleAlert } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardHeader,
-  CardDescription,
-  CardContent,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardHeader, CardDescription, CardContent, CardTitle } from "@/components/ui/card";
 import { FloatingInput } from "@/components/ui/floating-input";
 import { FloatingFileInput } from "../ui/floating-input-file";
 import { config } from "@/lib/config";
 import CompanySection from "../CompanySection";
+import { useAuthStore } from "@/store/authStore";
+import Alumni from "@/models/Alumni";
+import Image from "next/image";
 
-const AlumniInfoForm = () => {
+interface AlumniInfoFormProps {
+  mode?: "insert" | "update";
+  initialData?: Alumni;
+}
+
+const AlumniInfoForm = ({ mode = "insert", initialData }: AlumniInfoFormProps) => {
+  const { accessToken } = useAuthStore();
+  const router = useRouter();
+
   const [form, setForm] = useState({
-    studentID: "",
-    batch: "",
-    name: "",
-    email: "",
-    linkedIn: "",
-    facebook: "",
-    github: "",
-    skills: "",
+    student_id: initialData?.student_id || "",
+    batch: initialData?.batch || "",
+    name: initialData?.name || "",
+    email: initialData?.email || "",
+    linked_in: initialData?.linked_in || "",
+    facebook: initialData?.facebook || "",
+    github: initialData?.github || "",
+    skills: (initialData?.skills || []).join(", ") || "",
+    profile_photo: initialData?.profile_photo || "",
   });
 
-  const [companySections, setCompanySections] = useState([
-    {
-      industry: "",
-      software: "",
-      position: "",
-      responsibilities: "",
-      platform: "",
-    },
-  ]);
+  const [companySections, setCompanySections] = useState(
+    initialData?.industries?.length
+      ? initialData.industries
+      : [
+          {
+            industry: "",
+            software: "",
+            position: "",
+            responsibilities: "",
+            platform: "",
+          },
+        ]
+  );
 
-  const [showExtraFieldsFor, setShowExtraFieldsFor] = useState([false]);
-  const [presetSkills, setPresetSkills] = useState<string[]>(["Python", "MongoDB"]);
+  const [showExtraFieldsFor, setShowExtraFieldsFor] = useState(initialData?.industries?.map(() => true) || [false]);
+
   const [image, setImage] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState(initialData?.profile_photo || "");
+
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const router = useRouter();
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setPending(true);
-    setError(null);
-
-    try {
-      let imageUrl = "";
-      if (image) {
-        const formData = new FormData();
-        formData.append("file", image);
-
-        const uploadedImage = await fetch(`${config.apiBaseUrl}/v1/image/upload`, {
-          method: "POST",
-          body: formData,
-        });
-
-        const imgData = await uploadedImage.json();
-        imageUrl = `${config.apiBaseUrl}${imgData.image_url}`;
-      }
-
-      const res = await fetch(`${config.apiBaseUrl}/v1/alumni/insert`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          student_id: form.studentID,
-          batch: form.batch,
-          name: form.name,
-          email: form.email,
-          linked_in: form.linkedIn,
-          facebook: form.facebook,
-          profile_photo: imageUrl,
-          industries: companySections,
-          skills: form.skills,
-        }),
-      });
-
-      const data = await res.json();
-      if (res.status === 422) {
-        data.detail.forEach(
-          (error: { msg: string, loc: string }) => toast.error(error.msg + "  " + error.loc.toString())
-        );
-        setError("Failed to submit alumni information, Wrong Data");
-      }
-
-      if (res.ok) {
-        toast.success("Alumni information submitted successfully!");
-        router.push("/");
-      } else {
-        setError(data.message || "Failed to submit alumni information");
-      }
-    } catch (err) {
-      setError("An error occurred while submitting the form");
-    } finally {
-      setPending(false);
-    }
-  };
+  const presetIndustries = ["Google", "Microsoft", "Meta", "Amazon", "Tesla", "Banglalink", "bKash", "Pathao"];
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setImage(e.target.files[0]);
+    const file = e.target.files?.[0];
+    if (file) {
+      setImage(file);
+      setImagePreview(URL.createObjectURL(file));
     }
   };
 
@@ -125,35 +82,12 @@ const AlumniInfoForm = () => {
     setShowExtraFieldsFor([...showExtraFieldsFor, false]);
   };
 
-  const handleRemoveCompany = (indexToRemove: number) => {
-    const updated = companySections.filter((_, idx) => idx !== indexToRemove);
-    const newShowFields = [...showExtraFieldsFor];
-    newShowFields.splice(indexToRemove, 1);
+  const handleRemoveCompany = (index: number) => {
+    const updated = companySections.filter((_: any, i: number) => i !== index);
+    const updatedVisibility = showExtraFieldsFor.filter((_: any, i: number) => i !== index);
     setCompanySections(updated);
-    setShowExtraFieldsFor(newShowFields);
+    setShowExtraFieldsFor(updatedVisibility);
   };
-
-  const presetIndustries = [
-    "Google",
-    "Microsoft",
-    "Meta",
-    "Amazon",
-    "Tesla",
-    "Banglalink",
-    "bKash",
-    "Pathao",
-  ];
-
-  async function fetchPresetSkills() {
-    try {
-      const response = await fetch(`${config.apiBaseUrl}/v1/skills/preset`);
-      const data = await response.json();
-      if (!response.ok) return
-      setPresetSkills(data);
-    } catch (error) {
-      console.error("Error fetching preset skills:", error);
-    }
-  }
 
   const toggleExtraFields = (index: number) => {
     const updated = [...showExtraFieldsFor];
@@ -161,15 +95,73 @@ const AlumniInfoForm = () => {
     setShowExtraFieldsFor(updated);
   };
 
-  useEffect(() => { fetchPresetSkills() }, [])
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setPending(true);
+    setError(null);
+
+    try {
+      let imageUrl = initialData?.profile_photo || "";
+      if (image) {
+        const formData = new FormData();
+        formData.append("file", image);
+
+        const res = await fetch(`${config.apiBaseUrl}/v1/image/upload`, {
+          method: "POST",
+          body: formData,
+        });
+        const imgData = await res.json();
+        imageUrl = `${config.apiBaseUrl}${imgData.image_url}`;
+      }
+
+      const res = await fetch(`${config.apiBaseUrl}/v1/alumni/${mode}`, {
+        method: mode === "update" ? "PUT" : "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({
+          student_id: form.student_id,
+          batch: form.batch,
+          name: form.name,
+          email: form.email,
+          linked_in: form.linked_in,
+          facebook: form.facebook,
+          github: form.github,
+          profile_photo: imageUrl,
+          industries: companySections,
+          skills: form.skills,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        if (res.status === 422) {
+          data.detail.forEach((err: { msg: string; loc: string[] }) => toast.error(`${err.msg} ${err.loc.join(" ")}`));
+          setError("Validation error");
+        } else {
+          setError(data.message || "Submission failed");
+        }
+      } else {
+        toast.success("Profile saved successfully");
+        router.push("/profile");
+      }
+    } catch (err) {
+      console.error(err);
+      setError("Unexpected error occurred");
+    } finally {
+      setPending(false);
+    }
+  };
 
   return (
     <div className="h-full flex items-center justify-center p-6">
       <Card className="w-[80%] max-w-4xl p-6">
         <CardHeader>
-          <CardTitle className="text-center">Alumni Information</CardTitle>
-          <CardDescription className="text-sm text-center text-accent-foreground">
-            Please fill your information
+          <CardTitle className="text-center">{mode === "update" ? "Update Profile" : "Alumni Information"}</CardTitle>
+          <CardDescription className="text-center">
+            {mode === "update" ? "Modify your existing profile" : "Please fill your information"}
           </CardDescription>
         </CardHeader>
 
@@ -180,28 +172,26 @@ const AlumniInfoForm = () => {
           </div>
         )}
 
-        <CardContent className="px-2 sm:px-6">
+        <CardContent>
           <form
             onSubmit={handleSubmit}
-            className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-6"
-          >
-            {/* Basic Fields */}
+            className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-6">
             <FloatingInput
               type="text"
-              disabled={pending}
+              disabled={pending || mode === "update"}
               placeholder="CE19000"
               label="Student ID"
-              value={form.studentID}
-              onChange={(e) => setForm({ ...form, studentID: e.target.value })}
+              value={form.student_id}
+              onChange={(e) => setForm({ ...form, student_id: e.target.value })}
               required
             />
 
             <FloatingInput
               type="text"
-              disabled={pending}
+              disabled={pending || mode === "update"}
               placeholder="17"
               label="Batch"
-              value={form.batch}
+              value={form.batch.toString()}
               onChange={(e) => setForm({ ...form, batch: e.target.value })}
               required
             />
@@ -250,8 +240,8 @@ const AlumniInfoForm = () => {
               disabled={pending}
               placeholder="LinkedIn Profile URL"
               label="LinkedIn"
-              value={form.linkedIn}
-              onChange={(e) => setForm({ ...form, linkedIn: e.target.value })}
+              value={form.linked_in}
+              onChange={(e) => setForm({ ...form, linked_in: e.target.value })}
             />
 
             <FloatingInput
@@ -263,39 +253,48 @@ const AlumniInfoForm = () => {
               onChange={(e) => setForm({ ...form, facebook: e.target.value })}
             />
 
-            {/* Profile Photo for alumni */}
             <div className="col-span-full">
-              <FloatingFileInput label="Profile Photo" onChange={handleFileChange} />
+              <FloatingFileInput
+                label="Profile Photo"
+                onChange={handleFileChange}
+              />
             </div>
 
-            {/* Company Sections */}
-            {
-              companySections.map((company, idx) => (
-                <CompanySection
-                  key={idx}
-                  index={idx}
-                  company={company}
-                  pending={pending}
-                  showExtraFields={showExtraFieldsFor[idx]}
-                  toggleExtraFields={() => toggleExtraFields(idx)}
-                  companySections={companySections}
-                  setCompanySections={setCompanySections}
-                  isCurrentCompany={idx === 0}
-                  presetIndustries={presetIndustries}
-                  onRemove={idx === 0 ? undefined : () => handleRemoveCompany(idx)}
-                  isLastCompany={idx === companySections.length - 1}
-                  handleAddCompany={handleAddCompany}
+            {imagePreview && (
+              <div className="flex flex-col items-center gap-2 col-span-full">
+                <Image
+                  src={imagePreview}
+                  alt="Preview"
+                  width={24}
+                  height={24}
+                  className="w-24 h-24 object-cover rounded-full border"
                 />
-              ))
-            }
+              </div>
+            )}
 
-            {/* Submit Button */}
+            {companySections.map((company: any, idx: number) => (
+              <CompanySection
+                key={idx}
+                index={idx}
+                company={company}
+                pending={pending}
+                showExtraFields={showExtraFieldsFor[idx]}
+                toggleExtraFields={() => toggleExtraFields(idx)}
+                companySections={companySections}
+                setCompanySections={setCompanySections}
+                isCurrentCompany={idx === 0}
+                presetIndustries={presetIndustries}
+                onRemove={idx === 0 ? undefined : () => handleRemoveCompany(idx)}
+                isLastCompany={idx === companySections.length - 1}
+                handleAddCompany={handleAddCompany}
+              />
+            ))}
+
             <Button
               className="col-span-full justify-self-center w-full md:w-1/2 mt-6"
               size="lg"
-              disabled={pending}
-            >
-              {pending ? "Submitting..." : "Submit"}
+              disabled={pending}>
+              {pending ? "Saving..." : mode === "update" ? "Update" : "Submit"}
             </Button>
           </form>
         </CardContent>

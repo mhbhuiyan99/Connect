@@ -1,27 +1,28 @@
-'use client';
+"use client";
 
-import Image from 'next/image';
+import Image from "next/image";
 import { format } from "date-fns";
+import Notice from "@/models/Notice";
 
 function createdAtDate(createdAt: string) {
-  return <p>{format(new Date(createdAt), "yyyy-MM-dd")}</p>
+  return <p>{format(new Date(createdAt), "yyyy-MM-dd")}</p>;
 }
 
-export default function NoticeList({ notices }: { notices: any[] }) {
+export default function NoticeList({ notices }: { notices: Notice[] }) {
   return (
     <div className="space-y-6">
       {notices.length === 0 ? (
-        <div className="text-center py-12 text-gray-500">
-          No notices yet. Be the first to post one!
-        </div>
+        <div className="text-center py-12 text-gray-500">No notices yet. Be the first to post one!</div>
       ) : (
         notices.map((notice) => (
-          <div key={notice.id} className="bg-white p-6 rounded-lg shadow-md">
+          <div
+            key={notice.id}
+            className="bg-white p-6 rounded-lg shadow-md">
             <div className="flex items-center mb-4">
               <div className="flex-shrink-0">
                 <Image
-                  src={notice.author_profile_photo || '/default-avatar.png'}
-                  alt={notice.author_name || 'User'}
+                  src={notice.author_profile_photo || "/default-avatar.png"}
+                  alt={notice.author_name || "User"}
                   width={40}
                   height={40}
                   className="rounded-full"
@@ -32,7 +33,9 @@ export default function NoticeList({ notices }: { notices: any[] }) {
                 <span className="text-sm text-gray-500">{createdAtDate(notice.created_at)}</span>
               </div>
             </div>
-            <h3 className="text-xl font-semibold mb-2">{notices.indexOf(notice) + 1}. {notice.title}</h3>
+            <h3 className="text-xl font-semibold mb-2">
+              {notices.indexOf(notice) + 1}. {notice.title}
+            </h3>
             {/* <p className="text-gray-700 mb-4 whitespace-pre-line">{notice.content}</p> */}
             <p className="text-gray-700 mb-4 whitespace-pre-wrap break-words overflow-hidden">{notice.content}</p>
 

@@ -2,6 +2,9 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { Github, Facebook, Linkedin } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 type Company = {
   industry: string;
@@ -21,6 +24,7 @@ type AlumniProfileProps = {
   skills: string[];
   profile_photo: string | null;
   industries: Company[];
+  includeEditButton?: boolean;
 };
 
 const ProfileCard = ({
@@ -34,6 +38,7 @@ const ProfileCard = ({
   skills,
   profile_photo,
   industries,
+  includeEditButton = false,
 }: AlumniProfileProps) => {
   const currentCompany = industries[0];
   const previousCompanies = industries.slice(1);
@@ -66,10 +71,24 @@ const ProfileCard = ({
         <div className="mt-6">
           <h3 className="text-md font-semibold mb-2">Current Company</h3>
           <div className="text-sm text-gray-700 space-y-1">
-            <p><strong>Industry:</strong> {currentCompany.industry}</p>
-            {currentCompany.position && <p><strong>Position:</strong> {currentCompany.position}</p>}
-            {currentCompany.responsibilities && <p><strong>Responsibilities:</strong> {currentCompany.responsibilities}</p>}
-            {currentCompany.platform && <p><strong>Platform:</strong> {currentCompany.platform}</p>}
+            <p>
+              <strong>Industry:</strong> {currentCompany.industry}
+            </p>
+            {currentCompany.position && (
+              <p>
+                <strong>Position:</strong> {currentCompany.position}
+              </p>
+            )}
+            {currentCompany.responsibilities && (
+              <p>
+                <strong>Responsibilities:</strong> {currentCompany.responsibilities}
+              </p>
+            )}
+            {currentCompany.platform && (
+              <p>
+                <strong>Platform:</strong> {currentCompany.platform}
+              </p>
+            )}
           </div>
         </div>
       )}
@@ -80,11 +99,27 @@ const ProfileCard = ({
           <h3 className="text-md font-semibold mb-2">Previous Companies</h3>
           <div className="space-y-4">
             {previousCompanies.map((company, index) => (
-              <div key={index} className="text-sm text-gray-700 border p-3 rounded-lg">
-                <p><strong>Industry:</strong> {company.industry}</p>
-                {company.position && <p><strong>Position:</strong> {company.position}</p>}
-                {company.responsibilities && <p><strong>Responsibilities:</strong> {company.responsibilities}</p>}
-                {company.platform && <p><strong>Platform:</strong> {company.platform}</p>}
+              <div
+                key={index}
+                className="text-sm text-gray-700 border p-3 rounded-lg">
+                <p>
+                  <strong>Industry:</strong> {company.industry}
+                </p>
+                {company.position && (
+                  <p>
+                    <strong>Position:</strong> {company.position}
+                  </p>
+                )}
+                {company.responsibilities && (
+                  <p>
+                    <strong>Responsibilities:</strong> {company.responsibilities}
+                  </p>
+                )}
+                {company.platform && (
+                  <p>
+                    <strong>Platform:</strong> {company.platform}
+                  </p>
+                )}
               </div>
             ))}
           </div>
@@ -92,33 +127,89 @@ const ProfileCard = ({
       )}
 
       {/* Social Links */}
-      <div className="mt-6 flex justify-center gap-6 flex-wrap">
-        {student_id && (
-          <Link href={student_id} target="_blank" rel="noopener noreferrer" className="text-blue-600 text-sm underline">
-            LinkedIn
-          </Link>
-        )}
-        {facebook && (
-          <Link href={facebook} target="_blank" rel="noopener noreferrer" className="text-blue-600 text-sm underline">
-            Facebook
-          </Link>
-        )}
-        {github && (
-          <Link href={github} target="_blank" rel="noopener noreferrer" className="text-blue-600 text-sm underline">
-            GitHub
-          </Link>
-        )}
+      <div className="mt-6 flex justify-center gap-4 flex-wrap">
+        <TooltipProvider>
+          {linked_in && (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  asChild
+                  variant="link"
+                  size="sm"
+                  className="text-blue-600 hover:text-blue-700">
+                  <a
+                    href={linked_in}
+                    target="_blank"
+                    rel="noopener noreferrer">
+                    <Linkedin className="mr-1 h-4 w-4" />
+                    LinkedIn
+                  </a>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>View LinkedIn Profile</p>
+              </TooltipContent>
+            </Tooltip>
+          )}
+
+          {facebook && (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  asChild
+                  variant="link"
+                  size="sm"
+                  className="text-blue-600 hover:text-blue-700">
+                  <a
+                    href={facebook}
+                    target="_blank"
+                    rel="noopener noreferrer">
+                    <Facebook className="mr-1 h-4 w-4" />
+                    Facebook
+                  </a>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>View Facebook Profile</p>
+              </TooltipContent>
+            </Tooltip>
+          )}
+
+          {github && (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  asChild
+                  variant="link"
+                  size="sm"
+                  className="text-blue-600 hover:text-blue-700">
+                  <a
+                    href={github}
+                    target="_blank"
+                    rel="noopener noreferrer">
+                    <Github className="mr-1 h-4 w-4" />
+                    GitHub
+                  </a>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>View GitHub Profile</p>
+              </TooltipContent>
+            </Tooltip>
+          )}
+        </TooltipProvider>
       </div>
 
       {/* Edit Button */}
-      <div className="mt-6 flex justify-center">
-        <Link
-          href="/edit-profile"
-          className="bg-blue-500 hover:bg-blue-600 text-white text-sm px-4 py-2 rounded-md transition"
-        >
-          Edit Profile
-        </Link>
-      </div>
+      {includeEditButton && (
+        <div className="mt-6 flex justify-center">
+          <Link
+            href="/profile/update"
+            className="bg-blue-500 hover:bg-blue-600 text-white text-sm px-4 py-2 rounded-md transition">
+            Edit Profile
+          </Link>
+        </div>
+      )}
     </div>
   );
 };

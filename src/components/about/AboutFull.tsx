@@ -1,6 +1,4 @@
-
-import Image from 'next/image';
-import Link from 'next/link';
+import Image from "next/image";
 
 export default function AboutFull() {
   return (
@@ -11,7 +9,7 @@ export default function AboutFull() {
           src="/about-hero.jpg"
           alt="MBSTU,CSE Alumni Building"
           fill
-          style={{ objectFit: 'cover' }}
+          style={{ objectFit: "cover" }}
           className="opacity-70"
         />
         <div className="absolute inset-0 flex items-center justify-center">
@@ -25,8 +23,8 @@ export default function AboutFull() {
         <p className="text-gray-700 leading-relaxed text-justify">
           The Bangladesh University of Engineering and Technology Alumni Association connects graduates and empowers
           members through professional events, mentoring, and service to MBSTU,CSE and society. We partner with global
-          alumni networks, support student development, and strengthen bonds through networking, scholarships,
-          and community projects.
+          alumni networks, support student development, and strengthen bonds through networking, scholarships, and
+          community projects.
         </p>
       </section>
 
@@ -63,7 +61,6 @@ export default function AboutFull() {
           <p className="text-gray-800 font-semibold text-right">— Prof. xyz, President</p>
         </div>
       </section>
-
     </div>
   );
 }
