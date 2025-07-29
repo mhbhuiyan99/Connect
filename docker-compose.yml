@@ -1,0 +1,60 @@
+services:
+  traefik:
+    image: traefik:v3.4.3
+    command:
+      - "--providers.file.filename=/etc/traefik/dynamic.yml"
+      - "--providers.docker=true"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--api.dashboard=true"
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./traefik/traefik.yml:/etc/traefik/traefik.yml
+      - ./traefik/dynamic.yml:/etc/traefik/dynamic.yml
+      - ./traefik/certs:/certs
+    networks:
+      - web
+
+  backend:
+    build:
+      context: ./backend
+    command: [ "uv", "run", "main.py" ]
+    volumes:
+      - ./backend/:/app
+      - /app/.venv
+    ports:
+      - "8000:8000"
+    environment:
+      - MONGODB_URI=mongodb://host.docker.internal:27017/alumni
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.backend.loadbalancer.server.port=8000"
+      - "traefik.http.routers.backend.rule=Host(`api.hasibul.com`)"
+      - "traefik.http.routers.backend.entrypoints=websecure"
+      - "traefik.http.routers.backend.tls=true"
+    networks:
+      - web
+
+  frontend:
+    build:
+      context: ./frontend
+    command: [ "npm", "run", "dev" ]
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.frontend.loadbalancer.server.port=3000"
+      - "traefik.http.routers.frontend.rule=Host(`app.hasibul.com`)"
+      - "traefik.http.routers.frontend.entrypoints=websecure"
+      - "traefik.http.routers.frontend.tls=true"
+    networks:
+      - web
+
+networks:
+  web:
+    external: false

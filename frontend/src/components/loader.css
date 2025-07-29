@@ -1,0 +1,46 @@
+.loader {
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+
+.square {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background-color: #0070f3;
+  border-radius: 4px;
+  animation: rotateSquare 1.6s linear infinite;
+}
+
+.square1 {
+  top: 0;
+  left: 0;
+  animation-delay: 0s;
+}
+
+.square2 {
+  top: 0;
+  left: 0;
+  animation-delay: 0.4s;
+}
+
+.square3 {
+  top: 0;
+  left: 0;
+  animation-delay: 0.8s;
+}
+
+.square4 {
+  top: 0;
+  left: 0;
+  animation-delay: 1.2s;
+}
+
+@keyframes rotateSquare {
+  0%   { transform: translate(0, 0); }
+  25%  { transform: translate(60px, 0); }
+  50%  { transform: translate(60px, 60px); }
+  75%  { transform: translate(0, 60px); }
+  100% { transform: translate(0, 0); }
+}
